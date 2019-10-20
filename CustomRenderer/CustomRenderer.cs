@@ -33,10 +33,10 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             if (Control != null)
             {
                 GradientDrawable gd = new GradientDrawable();
-                //gd.SetShape(ShapeType.Oval);
+                gd.SetShape(ShapeType.Rectangle);
                 gd.SetColor(Android.Graphics.Color.White);
-                //By passing the color to stroke we can change the border color of NumericTextBox as well as stroke value we can increase the thickness of border
-                gd.SetStroke(1, Android.Graphics.Color.DarkRed);
+                gd.SetCornerRadius(10.0f);
+                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
                 Control.SetBackground(gd);
             }
         }
