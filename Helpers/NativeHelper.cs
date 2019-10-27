@@ -13,6 +13,7 @@ using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Models;
 
 [assembly: Xamarin.Forms.Dependency(typeof(NativeHelper))]
+[assembly: Xamarin.Forms.Dependency(typeof(ToastMessage))]
 namespace ExpressBase.Mobile.Droid.Helpers
 {
     public class NativeHelper : INativeHelper
@@ -22,6 +23,14 @@ namespace ExpressBase.Mobile.Droid.Helpers
         public void CloseApp()
         {
             Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+        }
+    }
+
+    public class ToastMessage : IToast
+    {
+        public void Show(string message)
+        {
+            Android.Widget.Toast.MakeText(Android.App.Application.Context, message, ToastLength.Long).Show();
         }
     }
 }
