@@ -6,6 +6,9 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using ExpressBase.Mobile.Services;
+using ExpressBase.Mobile.Constants;
+using System.IO;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -21,7 +24,28 @@ namespace ExpressBase.Mobile.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App());
+
+            App _app = null;
+
+            string sid = Store.GetValue(AppConst.SID);
+
+            if (string.IsNullOrEmpty(sid))
+            {
+                _app = new App();
+            }
+            else
+            {
+                string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), string.Format("{0}.db3", sid));
+
+                if (!File.Exists(dbPath))
+                {
+                    Mono.Data.Sqlite.SqliteConnection.CreateFile(dbPath);
+                }
+
+                _app = new App(dbPath);
+            }
+
+            LoadApplication(_app);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
