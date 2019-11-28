@@ -17,6 +17,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(TextBox), typeof(TextBoxRenderer))]
+[assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericBoxRenderer))]
 [assembly: ExportRenderer(typeof(XButton), typeof(ButtonRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomSelect), typeof(CustomSelectRenderer))]
@@ -25,6 +26,28 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
     class TextBoxRenderer : EntryRenderer
     {
         public TextBoxRenderer(Context context) : base(context)
+        {
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        {
+            base.OnElementChanged(e);
+
+            if (Control != null)
+            {
+                GradientDrawable gd = new GradientDrawable();
+                gd.SetShape(ShapeType.Rectangle);
+                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetCornerRadius(10.0f);
+                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                Control.SetBackground(gd);
+            }
+        }
+    }
+
+    class NumericBoxRenderer : EntryRenderer
+    {
+        public NumericBoxRenderer(Context context) : base(context)
         {
         }
 
