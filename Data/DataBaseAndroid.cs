@@ -138,6 +138,7 @@ namespace ExpressBase.Mobile.Droid.Data
                 {
                     ColumnName = reader.GetName(i),
                     ColumnIndex = i,
+                    Type = DbTypeConverter.ConvertToDbType(reader.GetFieldType(i))
                 });
             }
 
