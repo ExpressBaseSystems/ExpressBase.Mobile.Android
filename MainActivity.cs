@@ -5,6 +5,7 @@ using Android.OS;
 using ExpressBase.Mobile.Constants;
 using System.IO;
 using ExpressBase.Mobile.Helpers;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -42,6 +43,9 @@ namespace ExpressBase.Mobile.Droid
             }
 
             LoadApplication(_app);
+
+            // Enable scrolling to the page when the keyboard is enabled
+            Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
