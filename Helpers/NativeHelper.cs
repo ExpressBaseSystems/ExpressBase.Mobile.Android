@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -10,6 +11,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using ExpressBase.Mobile.Droid.Helpers;
+using ExpressBase.Mobile.Enums;
 using ExpressBase.Mobile.Models;
 using static Android.Provider.Settings;
 
@@ -22,6 +24,8 @@ namespace ExpressBase.Mobile.Droid.Helpers
         public NativeHelper() { }
 
         private string _devoiceid;
+
+        public string NativeRoot => Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
         public string DeviceId
         {
@@ -62,6 +66,56 @@ namespace ExpressBase.Mobile.Droid.Helpers
         public void CloseApp()
         {
             Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+        }
+
+        public bool DirectoryOrFileExist(string Path, SysContentType Type)
+        {
+            try
+            {
+                var pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Path}";
+                if (Type == SysContentType.File)
+                {
+                    return File.Exists(pathToNewFolder);
+                }
+                else if(Type == SysContentType.Directory)
+                {
+                    return Directory.Exists(pathToNewFolder);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return false;
+        }
+
+        public string CreateDirectoryOrFile(string DirectoryPath, SysContentType Type)
+        {
+            try
+            {
+                string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{DirectoryPath}";
+                if(Type == SysContentType.Directory)
+                {
+                    Directory.CreateDirectory(pathToNewFolder);
+                }
+                else
+                {
+                    File.Create(pathToNewFolder);
+                }
+                
+                return pathToNewFolder;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
+        public byte[] GetPhoto(string url)
+        {  
+            string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{url}";
+            return File.ReadAllBytes(path);
         }
     }
 
