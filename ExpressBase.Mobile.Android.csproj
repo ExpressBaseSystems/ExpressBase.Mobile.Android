@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
+    <Compile Include="Helpers\LoadingIndicatorDroid.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
@@ -160,6 +161,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\HeaderTriangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\InvertedTriangle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

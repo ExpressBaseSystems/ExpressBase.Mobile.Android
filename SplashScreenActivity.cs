@@ -12,18 +12,18 @@ using Android.Widget;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Theme = "@style/Theme.Splash",
-              MainLauncher = true,
-              NoHistory = true, Icon = "@mipmap/icon")]
-    public class SplashScreenActivity : Activity
-    {
-        protected override void OnCreate(Bundle bundle)
-        {
-            Window.DecorView.SystemUiVisibility = (StatusBarVisibility)((int)Window.DecorView.SystemUiVisibility ^ (int)SystemUiFlags.LayoutStable ^ (int)SystemUiFlags.LayoutFullscreen);
-            Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
-            Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-            base.OnCreate(bundle);
-            this.StartActivity(typeof(MainActivity));
-        }
-    }
+    //[Activity(Theme = "@style/Theme.Splash",
+    //          MainLauncher = true,
+    //          NoHistory = true, Icon = "@mipmap/icon")]
+    //public class SplashScreenActivity : Activity
+    //{
+    //    protected override void OnCreate(Bundle bundle)
+    //    {
+    //        Window.DecorView.SystemUiVisibility = (StatusBarVisibility)((int)Window.DecorView.SystemUiVisibility ^ (int)SystemUiFlags.LayoutStable ^ (int)SystemUiFlags.LayoutFullscreen);
+    //        Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
+    //        Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+    //        base.OnCreate(bundle);
+    //        this.StartActivity(typeof(MainActivity));
+    //    }
+    //}
 }
