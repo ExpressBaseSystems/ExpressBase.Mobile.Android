@@ -87,7 +87,6 @@
   <ItemGroup>
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
-    <Compile Include="Helpers\LoadingIndicatorDroid.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />

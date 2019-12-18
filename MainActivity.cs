@@ -9,7 +9,7 @@ using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Label = "ExpressBase.Mobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "ExpressBase.Mobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         readonly string[] Permissions =
@@ -29,7 +29,7 @@ namespace ExpressBase.Mobile.Droid
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            //RequestPermissions(Permissions, RequestId);//permissions
+            RequestPermissions(Permissions, RequestId);//permissions
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
             App _app = null;
