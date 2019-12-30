@@ -24,22 +24,6 @@ namespace ExpressBase.Mobile.Droid
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
             base.OnCreate(bundle);
             this.StartActivity(typeof(MainActivity));
-            Finish();
-        }
-
-        // Launches the startup task
-        protected override void OnResume()
-        {
-            base.OnResume();
-            Task startupWork = new Task(() => { SimulateStartup(); });
-            startupWork.Start();
-        }
-
-        // Simulates background work that happens behind the splash screen
-        async void SimulateStartup()
-        {
-            await Task.Delay(8000); // Simulate a bit of startup work.
-            StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
     }
 }
