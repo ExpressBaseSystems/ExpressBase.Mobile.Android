@@ -6,6 +6,7 @@ using ExpressBase.Mobile.Constants;
 using System.IO;
 using ExpressBase.Mobile.Helpers;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
+using Plugin.Media;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -17,16 +18,19 @@ namespace ExpressBase.Mobile.Droid
             Android.Manifest.Permission.Internet,
             Android.Manifest.Permission.ReadExternalStorage,
             Android.Manifest.Permission.WriteExternalStorage,
+            Android .Manifest.Permission.Camera
         };
 
         const int RequestId = 0;
              
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+
+            await CrossMedia.Current.Initialize();
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             RequestPermissions(Permissions, RequestId);//permissions
@@ -39,7 +43,7 @@ namespace ExpressBase.Mobile.Droid
             if (string.IsNullOrEmpty(sid))
             {
                 _app = new App();
-            }
+            } 
             else
             {
                 string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), string.Format("{0}.db3", sid));

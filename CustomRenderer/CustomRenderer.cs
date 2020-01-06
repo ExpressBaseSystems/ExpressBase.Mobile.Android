@@ -20,7 +20,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericBoxRenderer))]
 [assembly: ExportRenderer(typeof(XButton), typeof(ButtonRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
-[assembly: ExportRenderer(typeof(CustomSelect), typeof(CustomSelectRenderer))]
+[assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     class TextBoxRenderer : EntryRenderer
