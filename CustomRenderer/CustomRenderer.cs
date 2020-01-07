@@ -21,6 +21,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(XButton), typeof(ButtonRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
+[assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     class TextBoxRenderer : EntryRenderer
@@ -109,6 +110,29 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Picker> e)
+        {
+            base.OnElementChanged(e);
+
+            if (Control != null)
+            {
+                GradientDrawable gd = new GradientDrawable();
+                gd.SetShape(ShapeType.Rectangle);
+                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetCornerRadius(10.0f);
+                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                Control.SetBackground(gd);
+            }
+        }
+    }
+
+    public class CustomSearchRenderer : SearchBarRenderer
+    {
+        public CustomSearchRenderer(Context context) : base(context)
+        {
+
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.SearchBar> e)
         {
             base.OnElementChanged(e);
 
