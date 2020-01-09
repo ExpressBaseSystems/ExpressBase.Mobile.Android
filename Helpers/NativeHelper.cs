@@ -77,7 +77,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 {
                     return File.Exists(pathToNewFolder);
                 }
-                else if(Type == SysContentType.Directory)
+                else if (Type == SysContentType.Directory)
                 {
                     return Directory.Exists(pathToNewFolder);
                 }
@@ -94,7 +94,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             try
             {
                 string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{DirectoryPath}";
-                if(Type == SysContentType.Directory)
+                if (Type == SysContentType.Directory)
                 {
                     Directory.CreateDirectory(pathToNewFolder);
                 }
@@ -102,10 +102,10 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 {
                     File.Create(pathToNewFolder);
                 }
-                
+
                 return pathToNewFolder;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -113,9 +113,23 @@ namespace ExpressBase.Mobile.Droid.Helpers
         }
 
         public byte[] GetPhoto(string url)
-        {  
-            string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{url}";
-            return File.ReadAllBytes(path);
+        {
+            try
+            {
+                string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{url}";
+                return File.ReadAllBytes(path);
+            }
+            catch(Exception x)
+            {
+                Console.WriteLine(x.Message);
+            }
+            return null;
+        }
+
+        public string[] GetFiles(string Url, string Pattern)
+        {
+            string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Url}";
+            return Directory.GetFiles(path, Pattern);
         }
     }
 
