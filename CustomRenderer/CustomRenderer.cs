@@ -22,6 +22,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 [assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
+[assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     class TextBoxRenderer : EntryRenderer
@@ -145,6 +146,19 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                 gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
                 Control.SetBackground(gd);
             }
+        }
+    }
+
+    public class ComboLabelRenderer : LabelRenderer
+    {
+        public ComboLabelRenderer(Context context) : base(context)
+        {
+
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Label> e)
+        {
+            base.OnElementChanged(e);
         }
     }
 }
