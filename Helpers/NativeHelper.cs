@@ -131,6 +131,11 @@ namespace ExpressBase.Mobile.Droid.Helpers
             string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Url}";
             return Directory.GetFiles(path, Pattern);
         }
+
+        public string GetBaseURl()
+        {
+            return "file:///android_asset/";
+        }
     }
 
     public class ToastMessage : IToast

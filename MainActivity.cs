@@ -30,8 +30,9 @@ namespace ExpressBase.Mobile.Droid
 
             base.OnCreate(savedInstanceState);
 
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
             await CrossMedia.Current.Initialize();
 
             RequestPermissions(Permissions, RequestId);//permissions
