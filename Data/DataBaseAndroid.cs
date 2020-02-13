@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using ExpressBase.Mobile.Data;
 using ExpressBase.Mobile.Droid.Data;
+using ExpressBase.Mobile.Models;
 using Mono.Data.Sqlite;
 using Xamarin.Forms;
 
@@ -58,10 +59,8 @@ namespace ExpressBase.Mobile.Droid.Data
                         if (parameters != null && parameters.Length > 0)
                             cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
 
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            PrepareDataTable(reader, dt);
-                        }
+                        using var reader = cmd.ExecuteReader();
+                        PrepareDataTable(reader, dt);
                     }
                     con.Close();
                 }
@@ -73,9 +72,41 @@ namespace ExpressBase.Mobile.Droid.Data
             return dt;
         }
 
-        public void DoQueries(string query, params DbParameter[] parameters)
+        public EbDataSet DoQueries(string query, params DbParameter[] parameters)
         {
+            EbDataSet ds = new EbDataSet();
+            try
+            {
+                using (SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath))
+                {
+                    con.Open();
+                    using (SqliteCommand cmd = con.CreateCommand())
+                    {
+                        cmd.CommandText = query;
 
+                        if (parameters != null && parameters.Length > 0)
+                            cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            do
+                            {
+                                EbDataTable dt = new EbDataTable();
+                                PrepareDataTable(reader, dt);
+                                ds.Tables.Add(dt);
+                                ds.RowNumbers += dt.Rows.Count.ToString() + ",";
+                            }
+                            while (reader.NextResult());
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write("DataBaseAndroid.DoQueries---" + ex.Message);
+            }
+            return ds;
         }
 
         public int DoNonQuery(string query, params DbParameter[] parameters)
@@ -134,10 +165,10 @@ namespace ExpressBase.Mobile.Droid.Data
                                         _vals.Add("@" + column.ColumnName);
                                     }
 
-                                    cmd.Parameters.Add(new SqliteParameter { ParameterName = "@"+ column.ColumnName, Value = Table.Rows[k][i] });
+                                    cmd.Parameters.Add(new SqliteParameter { ParameterName = "@" + column.ColumnName, Value = Table.Rows[k][i] });
                                 }
 
-                                cmd.CommandText = string.Format(query, Table.TableName, string.Join(",", _cols.ToArray()), string.Join(",", _vals.ToArray()));                                
+                                cmd.CommandText = string.Format(query, Table.TableName, string.Join(",", _cols.ToArray()), string.Join(",", _vals.ToArray()));
                                 int rowAffected = cmd.ExecuteNonQuery();
                             }
 
