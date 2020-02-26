@@ -49,21 +49,19 @@ namespace ExpressBase.Mobile.Droid.Data
             EbDataTable dt = new EbDataTable();
             try
             {
-                using (SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath))
+                using SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath);
+                con.Open();
+                using (SqliteCommand cmd = con.CreateCommand())
                 {
-                    con.Open();
-                    using (SqliteCommand cmd = con.CreateCommand())
-                    {
-                        cmd.CommandText = query;
+                    cmd.CommandText = query;
 
-                        if (parameters != null && parameters.Length > 0)
-                            cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
+                    if (parameters != null && parameters.Length > 0)
+                        cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
 
-                        using var reader = cmd.ExecuteReader();
-                        PrepareDataTable(reader, dt);
-                    }
-                    con.Close();
+                    using var reader = cmd.ExecuteReader();
+                    PrepareDataTable(reader, dt);
                 }
+                con.Close();
             }
             catch (Exception e)
             {
@@ -77,30 +75,26 @@ namespace ExpressBase.Mobile.Droid.Data
             EbDataSet ds = new EbDataSet();
             try
             {
-                using (SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath))
+                using SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath);
+                con.Open();
+                using (SqliteCommand cmd = con.CreateCommand())
                 {
-                    con.Open();
-                    using (SqliteCommand cmd = con.CreateCommand())
+                    cmd.CommandText = query;
+
+                    if (parameters != null && parameters.Length > 0)
+                        cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
+
+                    using var reader = cmd.ExecuteReader();
+                    do
                     {
-                        cmd.CommandText = query;
-
-                        if (parameters != null && parameters.Length > 0)
-                            cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            do
-                            {
-                                EbDataTable dt = new EbDataTable();
-                                PrepareDataTable(reader, dt);
-                                ds.Tables.Add(dt);
-                                ds.RowNumbers += dt.Rows.Count.ToString() + ",";
-                            }
-                            while (reader.NextResult());
-                        }
+                        EbDataTable dt = new EbDataTable();
+                        PrepareDataTable(reader, dt);
+                        ds.Tables.Add(dt);
+                        ds.RowNumbers += dt.Rows.Count.ToString() + ",";
                     }
-                    con.Close();
+                    while (reader.NextResult());
                 }
+                con.Close();
             }
             catch (Exception ex)
             {
@@ -113,19 +107,15 @@ namespace ExpressBase.Mobile.Droid.Data
         {
             try
             {
-                using (SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath))
-                {
-                    con.Open();
-                    using (SqliteCommand cmd = con.CreateCommand())
-                    {
-                        cmd.CommandText = query;
+                using SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath);
+                con.Open();
+                using SqliteCommand cmd = con.CreateCommand();
+                cmd.CommandText = query;
 
-                        if (parameters != null && parameters.Length > 0)
-                            cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
+                if (parameters != null && parameters.Length > 0)
+                    cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
 
-                        return cmd.ExecuteNonQuery();
-                    }
-                }
+                return cmd.ExecuteNonQuery();
             }
             catch (Exception e)
             {
@@ -138,45 +128,41 @@ namespace ExpressBase.Mobile.Droid.Data
         {
             try
             {
-                using (SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath))
+                using SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath);
+                con.Open();
+                string query = "INSERT INTO {0} ({1}) VALUES ({2});";
+                List<string> _cols = new List<string>();
+                List<string> _vals = new List<string>();
+
+                using (SqliteCommand cmd = con.CreateCommand())
                 {
-                    con.Open();
-                    string query = "INSERT INTO {0} ({1}) VALUES ({2});";
-                    List<string> _cols = new List<string>();
-                    List<string> _vals = new List<string>();
-
-                    using (SqliteCommand cmd = con.CreateCommand())
+                    using SqliteTransaction transaction = con.BeginTransaction();
+                    for (int k = 0; k < Table.Rows.Count; k++)
                     {
-                        using (SqliteTransaction transaction = con.BeginTransaction())
+                        cmd.Parameters.Clear();
+
+                        if (k >= 1000)
+                            break;
+
+                        for (int i = 0; i < Table.Rows[k].Count; i++)
                         {
-                            for (int k = 0; k < Table.Rows.Count; k++)
+                            EbDataColumn column = Table.Columns.Find(item => item.ColumnIndex == i);
+                            if (k == 0)
                             {
-                                cmd.Parameters.Clear();
-
-                                if (k >= 1000)
-                                    break;
-
-                                for (int i = 0; i < Table.Rows[k].Count; i++)
-                                {
-                                    EbDataColumn column = Table.Columns.Find(item => item.ColumnIndex == i);
-                                    if (k == 0)
-                                    {
-                                        _cols.Add(column.ColumnName);
-                                        _vals.Add("@" + column.ColumnName);
-                                    }
-
-                                    cmd.Parameters.Add(new SqliteParameter { ParameterName = "@" + column.ColumnName, Value = Table.Rows[k][i] });
-                                }
-
-                                cmd.CommandText = string.Format(query, Table.TableName, string.Join(",", _cols.ToArray()), string.Join(",", _vals.ToArray()));
-                                int rowAffected = cmd.ExecuteNonQuery();
+                                _cols.Add(column.ColumnName);
+                                _vals.Add("@" + column.ColumnName);
                             }
 
-                            transaction.Commit();
+                            cmd.Parameters.Add(new SqliteParameter { ParameterName = "@" + column.ColumnName, Value = Table.Rows[k][i] });
                         }
+
+                        cmd.CommandText = string.Format(query, Table.TableName, string.Join(",", _cols.ToArray()), string.Join(",", _vals.ToArray()));
+                        int rowAffected = cmd.ExecuteNonQuery();
                     }
-                    con.Close();
+
+                    transaction.Commit();
                 }
+                con.Close();
             }
             catch (Exception e)
             {
@@ -188,19 +174,15 @@ namespace ExpressBase.Mobile.Droid.Data
         {
             try
             {
-                using (SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath))
-                {
-                    con.Open();
-                    using (SqliteCommand cmd = con.CreateCommand())
-                    {
-                        cmd.CommandText = query;
+                using SqliteConnection con = new SqliteConnection("Data Source=" + App.DbPath);
+                con.Open();
+                using SqliteCommand cmd = con.CreateCommand();
+                cmd.CommandText = query;
 
-                        if (parameters != null && parameters.Length > 0)
-                            cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
+                if (parameters != null && parameters.Length > 0)
+                    cmd.Parameters.AddRange(this.DbParamToSqlParam(parameters));
 
-                        return cmd.ExecuteScalar();
-                    }
-                }
+                return cmd.ExecuteScalar();
             }
             catch (Exception e)
             {
