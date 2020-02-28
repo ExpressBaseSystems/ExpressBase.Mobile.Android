@@ -2,14 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using ExpressBase.Mobile.Data;
 using ExpressBase.Mobile.Droid.Data;
 using ExpressBase.Mobile.Models;
@@ -39,7 +31,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Write(e.Message);
             }
             return 0;
         }
@@ -65,7 +57,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Write(e.Message);
             }
             return dt;
         }
@@ -119,7 +111,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Write(e.Message);
             }
             return 0;
         }
@@ -166,7 +158,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Write(e.Message);
             }
         }
 
@@ -186,7 +178,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Write(e.Message);
             }
             return null;
         }
