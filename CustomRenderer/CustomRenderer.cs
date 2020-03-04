@@ -17,6 +17,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(TextBox), typeof(TextBoxRenderer))]
+[assembly: ExportRenderer(typeof(TextArea), typeof(TextAreaRenderer))]
 [assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericBoxRenderer))]
 [assembly: ExportRenderer(typeof(XButton), typeof(ButtonRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
@@ -32,6 +33,28 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        {
+            base.OnElementChanged(e);
+
+            if (Control != null)
+            {
+                GradientDrawable gd = new GradientDrawable();
+                gd.SetShape(ShapeType.Rectangle);
+                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetCornerRadius(10.0f);
+                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                Control.SetBackground(gd);
+            }
+        }
+    }
+
+    class TextAreaRenderer : EditorRenderer
+    {
+        public TextAreaRenderer(Context context) : base(context)
+        {
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
 
