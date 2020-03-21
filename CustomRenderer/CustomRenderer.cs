@@ -162,6 +162,12 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
+                LinearLayout linearLayout = this.Control.GetChildAt(0) as LinearLayout;
+                linearLayout = linearLayout.GetChildAt(2) as LinearLayout;
+                linearLayout = linearLayout.GetChildAt(1) as LinearLayout;
+
+                linearLayout.Background = null; //removes underline
+
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
                 gd.SetColor(Android.Graphics.Color.White);

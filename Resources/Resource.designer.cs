@@ -5738,25 +5738,25 @@ namespace ExpressBase.Mobile.Droid
 			public const int doodlebg = 2131165282;
 			
 			// aapt resource value: 0x7F070063
-			public const int eblogo = 2131165283;
-			
-			// aapt resource value: 0x7F070064
-			public const int HeaderTriangle = 2131165284;
-			
-			// aapt resource value: 0x7F070068
-			public const int Icon = 2131165288;
-			
-			// aapt resource value: 0x7F070065
-			public const int ic_mtrl_chip_checked_black = 2131165285;
-			
-			// aapt resource value: 0x7F070066
-			public const int ic_mtrl_chip_checked_circle = 2131165286;
+			public const int HeaderTriangle = 2131165283;
 			
 			// aapt resource value: 0x7F070067
-			public const int ic_mtrl_chip_close_circle = 2131165287;
+			public const int Icon = 2131165287;
+			
+			// aapt resource value: 0x7F070064
+			public const int ic_mtrl_chip_checked_black = 2131165284;
+			
+			// aapt resource value: 0x7F070065
+			public const int ic_mtrl_chip_checked_circle = 2131165285;
+			
+			// aapt resource value: 0x7F070066
+			public const int ic_mtrl_chip_close_circle = 2131165286;
+			
+			// aapt resource value: 0x7F070068
+			public const int InvertedTriangle = 2131165288;
 			
 			// aapt resource value: 0x7F070069
-			public const int InvertedTriangle = 2131165289;
+			public const int logo = 2131165289;
 			
 			// aapt resource value: 0x7F07006A
 			public const int mtrl_snackbar_background = 2131165290;
