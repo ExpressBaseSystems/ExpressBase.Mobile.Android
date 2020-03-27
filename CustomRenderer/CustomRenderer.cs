@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using Android.Content;
 using Android.Graphics.Drawables;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using ExpressBase.Mobile.CustomControls;
 using ExpressBase.Mobile.Droid.CustomRenderer;
@@ -18,8 +8,6 @@ using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(TextBox), typeof(TextBoxRenderer))]
 [assembly: ExportRenderer(typeof(TextArea), typeof(TextAreaRenderer))]
-[assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericBoxRenderer))]
-[assembly: ExportRenderer(typeof(XButton), typeof(ButtonRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 [assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
@@ -38,11 +26,21 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
+                var textbox = e.NewElement as TextBox;
+
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.White);
-                gd.SetCornerRadius(10.0f);
-                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+
+                if (textbox.HasBackground)
+                    gd.SetColor(Android.Graphics.Color.White);
+                else
+                    gd.SetColor(Android.Graphics.Color.Transparent);
+
+                gd.SetCornerRadius(textbox.BorderRadius);
+
+                if (textbox.HasBorder)
+                    gd.SetStroke(textbox.BorderThickness, Android.Graphics.Color.ParseColor(textbox.BorderColor));
+
                 Control.SetBackground(gd);
             }
         }
@@ -62,44 +60,11 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             {
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetColor(Android.Graphics.Color.Transparent);
                 gd.SetCornerRadius(10.0f);
                 gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
                 Control.SetBackground(gd);
             }
-        }
-    }
-
-    class NumericBoxRenderer : EntryRenderer
-    {
-        public NumericBoxRenderer(Context context) : base(context)
-        {
-        }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
-        {
-            base.OnElementChanged(e);
-
-            if (Control != null)
-            {
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.White);
-                gd.SetCornerRadius(10.0f);
-                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
-                Control.SetBackground(gd);
-            }
-        }
-    }
-
-    public class XButtonRenderer : ButtonRenderer
-    {
-        public XButtonRenderer(Context context) : base(context)
-        {
-        }
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Button> e)
-        {
-            base.OnElementChanged(e);
         }
     }
 
@@ -118,7 +83,7 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             {
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetColor(Android.Graphics.Color.Transparent);
                 gd.SetCornerRadius(10.0f);
                 gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
                 Control.SetBackground(gd);
@@ -141,7 +106,7 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             {
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetColor(Android.Graphics.Color.Transparent);
                 gd.SetCornerRadius(10.0f);
                 gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
                 Control.SetBackground(gd);
@@ -170,7 +135,7 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.White);
+                gd.SetColor(Android.Graphics.Color.Transparent);
                 gd.SetCornerRadius(10.0f);
                 gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
                 Control.SetBackground(gd);
