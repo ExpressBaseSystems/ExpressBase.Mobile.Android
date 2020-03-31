@@ -18,7 +18,7 @@ namespace ExpressBase.Mobile.Droid
             Android.Manifest.Permission.Internet,
             Android.Manifest.Permission.ReadExternalStorage,
             Android.Manifest.Permission.WriteExternalStorage,
-            Android .Manifest.Permission.Camera
+            Android.Manifest.Permission.Camera
         };
 
         const int RequestId = 0;
@@ -27,38 +27,28 @@ namespace ExpressBase.Mobile.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-
             await CrossMedia.Current.Initialize();
 
             RequestPermissions(Permissions, RequestId);//permissions
 
             string sid = await Store.GetValueAsync(AppConst.SID);
 
-            App _app;
-
+            App application;
             if (string.IsNullOrEmpty(sid))
-            {
-                _app = new App();
-            }
+                application = new App();
             else
             {
                 string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), string.Format("{0}.db3", sid));
-
                 if (!File.Exists(dbPath))
-                {
                     Mono.Data.Sqlite.SqliteConnection.CreateFile(dbPath);
-                }
 
-                _app = new App(dbPath);
+                application = new App(dbPath);
             }
-
-            LoadApplication(_app);
-
+            LoadApplication(application);
             // Change the status bar color
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor("#0046bb"));
 
