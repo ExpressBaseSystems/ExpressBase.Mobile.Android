@@ -185,25 +185,32 @@ namespace ExpressBase.Mobile.Droid.Data
 
         protected void PrepareDataTable(SqliteDataReader reader, EbDataTable dt)
         {
-            int _fieldCount = reader.FieldCount;
-
-            for (int i = 0; i < _fieldCount; i++)
+            try
             {
-                dt.Columns.Add(new EbDataColumn
+                int _fieldCount = reader.FieldCount;
+
+                for (int i = 0; i < _fieldCount; i++)
                 {
-                    ColumnName = reader.GetName(i),
-                    ColumnIndex = i,
-                    Type = DbTypeConverter.ConvertToDbType(reader.GetFieldType(i))
-                });
-            }
+                    dt.Columns.Add(new EbDataColumn
+                    {
+                        ColumnName = reader.GetName(i),
+                        ColumnIndex = i,
+                        Type = DbTypeConverter.ConvertToDbType(reader.GetFieldType(i))
+                    });
+                }
 
-            while (reader.Read())
+                while (reader.Read())
+                {
+                    EbDataRow dr = dt.NewDataRow();
+                    object[] oArray = new object[_fieldCount];
+                    reader.GetValues(oArray);
+                    dr.AddRange(oArray);
+                    dt.Rows.Add(dr);
+                }
+            }
+            catch(Exception ex)
             {
-                EbDataRow dr = dt.NewDataRow();
-                object[] oArray = new object[_fieldCount];
-                reader.GetValues(oArray);
-                dr.AddRange(oArray);
-                dt.Rows.Add(dr);
+                Log.Write(ex.Message);
             }
         }
 
