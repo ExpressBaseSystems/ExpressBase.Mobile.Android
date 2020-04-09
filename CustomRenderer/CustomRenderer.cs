@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(TextBox), typeof(TextBoxRenderer))]
+[assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericTextBoxRenderer))]
 [assembly: ExportRenderer(typeof(TextArea), typeof(TextAreaRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
@@ -27,6 +28,38 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             if (Control != null)
             {
                 var textbox = e.NewElement as TextBox;
+
+                GradientDrawable gd = new GradientDrawable();
+                gd.SetShape(ShapeType.Rectangle);
+
+                if (textbox.HasBackground)
+                    gd.SetColor(Android.Graphics.Color.White);
+                else
+                    gd.SetColor(Android.Graphics.Color.Transparent);
+
+                gd.SetCornerRadius(textbox.BorderRadius);
+
+                if (textbox.HasBorder)
+                    gd.SetStroke(textbox.BorderThickness, Android.Graphics.Color.ParseColor(textbox.BorderColor));
+
+                Control.SetBackground(gd);
+            }
+        }
+    }
+
+    class NumericTextBoxRenderer : EntryRenderer
+    {
+        public NumericTextBoxRenderer(Context context) : base(context)
+        {
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        {
+            base.OnElementChanged(e);
+
+            if (Control != null)
+            {
+                var textbox = e.NewElement as NumericTextBox;
 
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
