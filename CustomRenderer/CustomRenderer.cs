@@ -13,6 +13,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 [assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
 [assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
+[assembly: ExportRenderer(typeof(InputGroup), typeof(InputGroupRenderer))]
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     class TextBoxRenderer : EntryRenderer
@@ -27,21 +28,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
-                var textbox = e.NewElement as TextBox;
+                var ctrl = e.NewElement as IEbCustomControl;
 
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-
-                if (textbox.HasBackground)
-                    gd.SetColor(Android.Graphics.Color.White);
+                gd.SetCornerRadius(ctrl.BorderRadius);
+                if(string.IsNullOrEmpty(ctrl.BorderColor)) 
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
                 else
-                    gd.SetColor(Android.Graphics.Color.Transparent);
-
-                gd.SetCornerRadius(textbox.BorderRadius);
-
-                if (textbox.HasBorder)
-                    gd.SetStroke(textbox.BorderThickness, Android.Graphics.Color.ParseColor(textbox.BorderColor));
-
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
                 Control.SetBackground(gd);
             }
         }
@@ -59,21 +54,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
-                var textbox = e.NewElement as NumericTextBox;
+                var ctrl = e.NewElement as IEbCustomControl;
 
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-
-                if (textbox.HasBackground)
-                    gd.SetColor(Android.Graphics.Color.White);
+                gd.SetCornerRadius(ctrl.BorderRadius);
+                if (string.IsNullOrEmpty(ctrl.BorderColor))
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
                 else
-                    gd.SetColor(Android.Graphics.Color.Transparent);
-
-                gd.SetCornerRadius(textbox.BorderRadius);
-
-                if (textbox.HasBorder)
-                    gd.SetStroke(textbox.BorderThickness, Android.Graphics.Color.ParseColor(textbox.BorderColor));
-
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
                 Control.SetBackground(gd);
             }
         }
@@ -91,11 +80,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
+                var ctrl = e.NewElement as IEbCustomControl;
+
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.Transparent);
-                gd.SetCornerRadius(10.0f);
-                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                gd.SetCornerRadius(ctrl.BorderRadius);
+                if (string.IsNullOrEmpty(ctrl.BorderColor))
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
+                else
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
                 Control.SetBackground(gd);
             }
         }
@@ -114,11 +107,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
+                var ctrl = e.NewElement as IEbCustomControl;
+
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.Transparent);
-                gd.SetCornerRadius(10.0f);
-                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                gd.SetCornerRadius(ctrl.BorderRadius);
+                if (string.IsNullOrEmpty(ctrl.BorderColor))
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
+                else
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
                 Control.SetBackground(gd);
             }
         }
@@ -137,11 +134,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
             if (Control != null)
             {
+                var ctrl = e.NewElement as IEbCustomControl;
+
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.Transparent);
-                gd.SetCornerRadius(10.0f);
-                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                gd.SetCornerRadius(ctrl.BorderRadius);
+                if (string.IsNullOrEmpty(ctrl.BorderColor))
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
+                else
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
                 Control.SetBackground(gd);
             }
         }
@@ -166,11 +167,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
                 linearLayout.Background = null; //removes underline
 
+                var ctrl = e.NewElement as IEbCustomControl;
+
                 GradientDrawable gd = new GradientDrawable();
                 gd.SetShape(ShapeType.Rectangle);
-                gd.SetColor(Android.Graphics.Color.Transparent);
-                gd.SetCornerRadius(10.0f);
-                gd.SetStroke(1, Android.Graphics.Color.ParseColor("#cccccc"));
+                gd.SetCornerRadius(ctrl.BorderRadius);
+                if (string.IsNullOrEmpty(ctrl.BorderColor))
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
+                else
+                    gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
                 Control.SetBackground(gd);
             }
         }
@@ -186,6 +191,30 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Label> e)
         {
             base.OnElementChanged(e);
+        }
+    }
+
+    public class InputGroupRenderer : FrameRenderer
+    {
+        public InputGroupRenderer(Context context) : base(context)
+        {
+
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Frame> e)
+        {
+            base.OnElementChanged(e);
+
+            var ctrl = e.NewElement as IEbCustomControl;
+
+            GradientDrawable gd = new GradientDrawable();
+            gd.SetShape(ShapeType.Rectangle);
+            gd.SetCornerRadius(ctrl.BorderRadius);
+            if (string.IsNullOrEmpty(ctrl.BorderColor))
+                gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.Transparent);
+            else
+                gd.SetStroke(ctrl.BorderThickness, Android.Graphics.Color.ParseColor(ctrl.BorderColor));
+            this.SetBackground(gd);
         }
     }
 }
