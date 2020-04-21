@@ -12,9 +12,7 @@ using Android.Widget;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Theme = "@style/Theme.Splash",
-              MainLauncher = true,
-              NoHistory = true, Icon = "@mipmap/icon")]
+    [Activity(Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true, Icon = "@mipmap/icon")]
     public class SplashScreenActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)

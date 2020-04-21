@@ -67,7 +67,7 @@
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <AndroidDexTool>d8</AndroidDexTool>
-    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
   </PropertyGroup>
