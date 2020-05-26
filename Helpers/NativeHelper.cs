@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Enums;
-using ExpressBase.Mobile.Models;
+using ExpressBase.Mobile.Helpers;
 using static Android.Provider.Settings;
 
 [assembly: Xamarin.Forms.Dependency(typeof(NativeHelper))]
@@ -133,7 +125,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
         {
             try
             {
-                string sid = Settings.SolutionId.ToUpper();
+                string sid = Utils.SolutionId.ToUpper();
 
                 string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/ExpressBase/{sid}/logs.txt";
 
