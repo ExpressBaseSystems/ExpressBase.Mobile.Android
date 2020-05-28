@@ -7,6 +7,7 @@ using System.IO;
 using ExpressBase.Mobile.Helpers;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Plugin.Media;
+using ExpressBase.Mobile.Models;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -29,27 +30,15 @@ namespace ExpressBase.Mobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(savedInstanceState);
 
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             await CrossMedia.Current.Initialize();
-
+             
             RequestPermissions(Permissions, RequestId);//permissions
 
-            string sid = await Store.GetValueAsync(AppConst.SID);
+            LoadApplication(new App());
 
-            App application;
-            if (string.IsNullOrEmpty(sid))
-                application = new App();
-            else
-            {
-                string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), string.Format("{0}.db3", sid));
-                if (!File.Exists(dbPath))
-                    Mono.Data.Sqlite.SqliteConnection.CreateFile(dbPath);
-
-                application = new App(dbPath);
-            }
-            LoadApplication(application);
-            // Change the status bar color
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor("#0046bb"));
 
             // Enable scrolling to the page when the keyboard is enabled
@@ -59,7 +48,7 @@ namespace ExpressBase.Mobile.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
+            global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }

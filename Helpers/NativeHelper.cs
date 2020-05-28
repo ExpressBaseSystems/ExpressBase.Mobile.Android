@@ -125,7 +125,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
         {
             try
             {
-                string sid = Utils.SolutionId.ToUpper();
+                string sid = App.Settings.Sid.ToUpper();
 
                 string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/ExpressBase/{sid}/logs.txt";
 
