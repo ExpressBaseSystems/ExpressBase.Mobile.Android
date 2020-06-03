@@ -2,12 +2,8 @@
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using ExpressBase.Mobile.Constants;
-using System.IO;
-using ExpressBase.Mobile.Helpers;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Plugin.Media;
-using ExpressBase.Mobile.Models;
 
 namespace ExpressBase.Mobile.Droid
 {
