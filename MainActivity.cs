@@ -6,6 +6,7 @@ using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Plugin.Media;
 using Android.Util;
 using Android.Gms.Common;
+using System;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -14,7 +15,7 @@ namespace ExpressBase.Mobile.Droid
     {
         public const string TAG = "MainActivity";
 
-        internal static readonly string CHANNEL_ID = "my_notification_channel";
+        internal static readonly string CHANNEL_ID = "eb_pns_nf_channel";
 
         readonly string[] Permissions =
         {
@@ -37,23 +38,11 @@ namespace ExpressBase.Mobile.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             await CrossMedia.Current.Initialize();
-             
+
             RequestPermissions(Permissions, RequestId);//permissions
 
             LoadApplication(new App());
 
-            if (Intent.Extras != null)
-            {
-                foreach (var key in Intent.Extras.KeySet())
-                {
-                    if (key != null)
-                    {
-                        var value = Intent.Extras.GetString(key);
-                        Log.Debug(TAG, "Key: {0} Value: {1}", key, value);
-                    }
-                }
-            }
-            // in "real" app you will have to deal with it if services are unavailable
             IsPlayServicesAvailable();
             CreateNotificationChannel();
 

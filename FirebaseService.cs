@@ -6,22 +6,18 @@ using Android.Util;
 using Firebase.Messaging;
 using Android.Support.V4.App;
 using WindowsAzure.Messaging;
+using ExpressBase.Mobile.Helpers;
+using ExpressBase.Mobile.Constants;
 
 namespace ExpressBase.Mobile.Droid
 {
-    public static class Constants
-    {
-        public const string ListenConnectionString = "<Listen connection string>";
-
-        public const string NotificationHubName = "<hub name>";
-    }
-
     [Service]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
     public class FirebaseService : FirebaseMessagingService
     {
         const string TAG = "MyFirebaseMsgService";
+
         NotificationHub hub;
 
         public override void OnMessageReceived(RemoteMessage message)
@@ -37,7 +33,6 @@ namespace ExpressBase.Mobile.Droid
             {
                 //Only used for debugging payloads sent from the Azure portal
                 SendNotification(message.Data.Values.First());
-
             }
         }
 
@@ -49,7 +44,7 @@ namespace ExpressBase.Mobile.Droid
 
             var notificationBuilder = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID);
 
-            notificationBuilder.SetContentTitle("FCM Message")
+            notificationBuilder.SetContentTitle(Constants.NotificationTitle)
                         .SetSmallIcon(Resource.Drawable.ic_launcher)
                         .SetContentText(messageBody)
                         .SetAutoCancel(true)
@@ -64,18 +59,20 @@ namespace ExpressBase.Mobile.Droid
         public override void OnNewToken(string token)
         {
             Log.Debug(TAG, "FCM token: " + token);
+            Store.SetValue(AppConst.PNS_TOKEN, token);
+
             SendRegistrationToServer(token);
         }
 
         void SendRegistrationToServer(string token)
         {
             // Register with Notification Hubs
-            hub = new NotificationHub(Constants.NotificationHubName,
-                                        Constants.ListenConnectionString, this);
+            hub = new NotificationHub(Constants.NotificationHubName, Constants.ListenConnectionString, this);
 
-            var tags = new List<string>() { };
+            var tags = new List<string>() { "eb_pns_global" };
             var regID = hub.Register(token, tags.ToArray()).RegistrationId;
 
+            Store.SetValue(AppConst.AZURE_REGID, regID);
             Log.Debug(TAG, $"Successful registration of ID {regID}");
         }
     }
