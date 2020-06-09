@@ -13,7 +13,6 @@ namespace ExpressBase.Mobile.Droid
 {
     [Service]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
-    [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
     public class FirebaseService : FirebaseMessagingService
     {
         const string TAG = "MyFirebaseMsgService";
