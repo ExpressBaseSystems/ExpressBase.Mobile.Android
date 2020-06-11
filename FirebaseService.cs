@@ -8,6 +8,7 @@ using Android.Support.V4.App;
 using WindowsAzure.Messaging;
 using ExpressBase.Mobile.Helpers;
 using ExpressBase.Mobile.Constants;
+using System;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -57,22 +58,37 @@ namespace ExpressBase.Mobile.Droid
 
         public override void OnNewToken(string token)
         {
-            Log.Debug(TAG, "FCM token: " + token);
-            Store.SetValue(AppConst.PNS_TOKEN, token);
+            Log.Debug(TAG, "FCM Handle: " + token);
 
-            SendRegistrationToServer(token);
+            EbLog.Write("FCM Handle:",Enums.LogTypes.MESSAGE);
+
+            if (token != null)
+            {
+                Store.SetValue(AppConst.PNS_TOKEN, token);
+                SendRegistrationToServer(token);
+            }
         }
 
         void SendRegistrationToServer(string token)
         {
-            // Register with Notification Hubs
-            hub = new NotificationHub(Constants.NotificationHubName, Constants.ListenConnectionString, this);
+            try
+            {
+                // Register with Notification Hubs
+                hub = new NotificationHub(Constants.NotificationHubName, Constants.ListenConnectionString, this);
 
-            var tags = new List<string>() { "eb_pns_global" };
-            var regID = hub.Register(token, tags.ToArray()).RegistrationId;
+                Registration reg = hub.Register(token, new string[] { "eb_pns_global" });
 
-            Store.SetValue(AppConst.AZURE_REGID, regID);
-            Log.Debug(TAG, $"Successful registration of ID {regID}");
+                if (reg != null && reg.RegistrationId != null)
+                {
+                    Store.SetValue(AppConst.AZURE_REGID, reg.RegistrationId);
+
+                    Log.Debug(TAG, $"Successful registration of ID {reg.RegistrationId}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Debug(TAG, ex.Message);
+            }
         }
     }
 }
