@@ -16,8 +16,8 @@ namespace ExpressBase.Mobile.Droid
     {
         public const string NotificationTitle = "EXPRESSbase";
 
-        public const string ListenConnectionString = "Endpoint=sb://eb-notf-ns-1.servicebus.windows.net/;SharedAccessKeyName=DefaultListenSharedAccessSignature;SharedAccessKey=lUNytUkQZzHdcjn/1iBt2875oYxDG3GxEY9WXCC/cSc=";//"<Listen connection string>";
+        public const string ListenConnectionString = "<Listen connection string>";
 
-        public const string NotificationHubName = "eb-notf-hb-1";//"<hub name>";
+        public const string NotificationHubName = "<hub name>";
     }
 }
