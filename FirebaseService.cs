@@ -60,8 +60,6 @@ namespace ExpressBase.Mobile.Droid
         {
             Log.Debug(TAG, "FCM Handle: " + token);
 
-            EbLog.Write("FCM Handle:",Enums.LogTypes.MESSAGE);
-
             if (token != null)
             {
                 Store.SetValue(AppConst.PNS_TOKEN, token);
