@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Android.App;
 using Android.Content;
-using Android.Util;
 using Firebase.Messaging;
 using Android.Support.V4.App;
-using WindowsAzure.Messaging;
 using ExpressBase.Mobile.Helpers;
 using ExpressBase.Mobile.Constants;
 using System;
+using Android.OS;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -16,77 +14,54 @@ namespace ExpressBase.Mobile.Droid
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class FirebaseService : FirebaseMessagingService
     {
-        const string TAG = "MyFirebaseMsgService";
-
-        NotificationHub hub;
+        public override void OnNewToken(string token)
+        {
+            Store.SetValue(AppConst.PNS_TOKEN, token);
+        }
 
         public override void OnMessageReceived(RemoteMessage message)
         {
-            Log.Debug(TAG, "From: " + message.From);
+            base.OnMessageReceived(message);
+
+            string messageBody;
+
             if (message.GetNotification() != null)
             {
-                //These is how most messages will be received
-                Log.Debug(TAG, "Notification Message Body: " + message.GetNotification().Body);
-                SendNotification(message.GetNotification().Body);
+                messageBody = message.GetNotification().Body;
             }
             else
             {
-                //Only used for debugging payloads sent from the Azure portal
-                SendNotification(message.Data.Values.First());
+                messageBody = message.Data.Values.First();
             }
+
+            SendLocalNotification(messageBody);
         }
 
-        void SendNotification(string messageBody)
+        void SendLocalNotification(string body)
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
-            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.OneShot);
+            intent.PutExtra("message", body);
 
-            var notificationBuilder = new NotificationCompat.Builder(this, MainActivity.CHANNEL_ID);
+            //Unique request code to avoid PendingIntent collision.
+            var requestCode = new Random().Next();
+            var pendingIntent = PendingIntent.GetActivity(this, requestCode, intent, PendingIntentFlags.OneShot);
 
-            notificationBuilder.SetContentTitle(Constants.NotificationTitle)
-                        .SetSmallIcon(Resource.Drawable.ic_launcher)
-                        .SetContentText(messageBody)
-                        .SetAutoCancel(true)
-                        .SetShowWhen(false)
-                        .SetContentIntent(pendingIntent);
+            var notificationBuilder = new NotificationCompat.Builder(this, NFConstants.Channel)
+                .SetContentTitle(NFConstants.Title)
+                .SetSmallIcon(Resource.Drawable.ic_launcher)
+                .SetContentText(body)
+                .SetAutoCancel(true)
+                .SetShowWhen(false)
+                .SetContentIntent(pendingIntent);
+
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                notificationBuilder.SetChannelId(NFConstants.Channel);
+            }
 
             var notificationManager = NotificationManager.FromContext(this);
-
             notificationManager.Notify(0, notificationBuilder.Build());
-        }
-
-        public override void OnNewToken(string token)
-        {
-            Log.Debug(TAG, "FCM Handle: " + token);
-
-            if (token != null)
-            {
-                Store.SetValue(AppConst.PNS_TOKEN, token);
-                SendRegistrationToServer(token);
-            }
-        }
-
-        void SendRegistrationToServer(string token)
-        {
-            try
-            {
-                // Register with Notification Hubs
-                hub = new NotificationHub(Constants.NotificationHubName, Constants.ListenConnectionString, this);
-
-                Registration reg = hub.Register(token, new string[] { "eb_pns_global" });
-
-                if (reg != null && reg.RegistrationId != null)
-                {
-                    Store.SetValue(AppConst.AZURE_REGID, reg.RegistrationId);
-
-                    Log.Debug(TAG, $"Successful registration of ID {reg.RegistrationId}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Debug(TAG, ex.Message);
-            }
         }
     }
 }

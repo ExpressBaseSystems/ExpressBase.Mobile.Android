@@ -7,26 +7,13 @@ using Plugin.Media;
 using Android.Util;
 using Android.Gms.Common;
 using System;
+using Android.Content;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Label = "ExpressBase.Mobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "ExpressBase.Mobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        public const string TAG = "MainActivity";
-
-        internal static readonly string CHANNEL_ID = "eb_pns_nf_channel";
-
-        readonly string[] Permissions =
-        {
-            Android.Manifest.Permission.Internet,
-            Android.Manifest.Permission.ReadExternalStorage,
-            Android.Manifest.Permission.WriteExternalStorage,
-            Android.Manifest.Permission.Camera
-        };
-
-        const int RequestId = 0;
-
         protected override async void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -39,11 +26,12 @@ namespace ExpressBase.Mobile.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             await CrossMedia.Current.Initialize();
 
-            RequestPermissions(Permissions, RequestId);//permissions
-
             LoadApplication(new App());
 
-            IsPlayServicesAvailable();
+            if (!IsPlayServicesAvailable())
+            {
+                throw new Exception("This device does not have Google Play Services and cannot receive push notifications.");
+            }
             CreateNotificationChannel();
 
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor("#0046bb"));
@@ -59,44 +47,42 @@ namespace ExpressBase.Mobile.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+        }
+
         public bool IsPlayServicesAvailable()
         {
             int resultCode = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
             if (resultCode != ConnectionResult.Success)
             {
                 if (GoogleApiAvailability.Instance.IsUserResolvableError(resultCode))
-                    Log.Debug(TAG, GoogleApiAvailability.Instance.GetErrorString(resultCode));
+                    Log.Debug(NFConstants.DeBugTag, GoogleApiAvailability.Instance.GetErrorString(resultCode));
                 else
                 {
-                    Log.Debug(TAG, "This device is not supported");
+                    Log.Debug(NFConstants.DeBugTag, "This device is not supported");
                     Finish();
                 }
                 return false;
             }
-
-            Log.Debug(TAG, "Google Play Services is available.");
             return true;
         }
 
         private void CreateNotificationChannel()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                // Notification channels are new in API 26 (and not a part of the
-                // support library). There is no need to create a notification
-                // channel on older versions of Android.
-                return;
+                var channelName = NFConstants.Channel;
+                var channelDescription = string.Empty;
+                var channel = new NotificationChannel(channelName, channelName, NotificationImportance.Default)
+                {
+                    Description = channelDescription
+                };
+
+                var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+                notificationManager.CreateNotificationChannel(channel);
             }
-
-            var channelName = CHANNEL_ID;
-            var channelDescription = string.Empty;
-            var channel = new NotificationChannel(CHANNEL_ID, channelName, NotificationImportance.Default)
-            {
-                Description = channelDescription
-            };
-
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            notificationManager.CreateNotificationChannel(channel);
         }
     }
 }
