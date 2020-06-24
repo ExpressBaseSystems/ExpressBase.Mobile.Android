@@ -11,7 +11,12 @@ using Android.Content;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Label = "ExpressBase.Mobile", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Label = "ExpressBase.Mobile",
+        Icon = "@mipmap/icon",
+        Theme = "@style/MainTheme",
+        MainLauncher = false,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override async void OnCreate(Bundle savedInstanceState)
@@ -44,12 +49,14 @@ namespace ExpressBase.Mobile.Droid
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
+            IntentHandler(intent);
         }
 
         public bool IsPlayServicesAvailable()
@@ -79,10 +86,14 @@ namespace ExpressBase.Mobile.Droid
                 {
                     Description = channelDescription
                 };
-
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 notificationManager.CreateNotificationChannel(channel);
             }
+        }
+
+        void IntentHandler(Intent intent)
+        {
+
         }
     }
 }

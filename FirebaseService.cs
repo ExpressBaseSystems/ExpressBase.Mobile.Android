@@ -33,7 +33,6 @@ namespace ExpressBase.Mobile.Droid
             {
                 messageBody = message.Data.Values.First();
             }
-
             SendLocalNotification(messageBody);
         }
 
