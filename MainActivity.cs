@@ -39,7 +39,7 @@ namespace ExpressBase.Mobile.Droid
             }
             CreateNotificationChannel();
 
-            this.SetStatusBarColor(Android.Graphics.Color.ParseColor("#0046bb"));
+            this.SetStatusBarColor(Android.Graphics.Color.ParseColor(ExpressBase.Mobile.Configuration.Config.StatusBarColor));
 
             // Enable scrolling to the page when the keyboard is enabled
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
