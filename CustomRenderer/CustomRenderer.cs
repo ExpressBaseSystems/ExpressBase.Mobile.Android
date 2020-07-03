@@ -14,6 +14,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
 [assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
 [assembly: ExportRenderer(typeof(InputGroup), typeof(InputGroupRenderer))]
+[assembly: ExportRenderer(typeof(HiddenEntry), typeof(HiddenEntryRenderer))]
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     class TextBoxRenderer : EntryRenderer
@@ -236,6 +237,19 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                 gd.SetColor(ctrl.BgColor.ToAndroid());
 
             this.SetBackground(gd);
+        }
+    }
+
+    public class HiddenEntryRenderer : EntryRenderer
+    {
+        public HiddenEntryRenderer(Context context) : base(context) { }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Entry> e)
+        {
+            base.OnElementChanged(e);
+
+            Control.SetCursorVisible(false);
+            Control.SetBackgroundColor(Android.Graphics.Color.Transparent);
         }
     }
 }
