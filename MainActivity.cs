@@ -11,12 +11,7 @@ using Android.Content;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Label = "ExpressBase.Mobile",
-        Icon = "@mipmap/icon",
-        Theme = "@style/MainTheme",
-        MainLauncher = false,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        LaunchMode = LaunchMode.SingleTop)]
+    [Activity(Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override async void OnCreate(Bundle savedInstanceState)
@@ -33,11 +28,11 @@ namespace ExpressBase.Mobile.Droid
 
             LoadApplication(new App());
 
-            if (!IsPlayServicesAvailable())
+            if (ExpressBase.Mobile.Configuration.Config.NFEnabled)
             {
-                throw new Exception("This device does not have Google Play Services and cannot receive push notifications.");
+                IsPlayServicesAvailable();
+                CreateNotificationChannel();
             }
-            CreateNotificationChannel();
 
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor(ExpressBase.Mobile.Configuration.Config.StatusBarColor));
 
@@ -56,7 +51,6 @@ namespace ExpressBase.Mobile.Droid
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            IntentHandler(intent);
         }
 
         public bool IsPlayServicesAvailable()
@@ -89,11 +83,6 @@ namespace ExpressBase.Mobile.Droid
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 notificationManager.CreateNotificationChannel(channel);
             }
-        }
-
-        void IntentHandler(Intent intent)
-        {
-
         }
     }
 }

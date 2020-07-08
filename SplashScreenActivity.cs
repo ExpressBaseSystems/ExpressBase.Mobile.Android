@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
+﻿using Android.App;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using ExpressBase.Mobile.Configuration;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Theme = "@style/Theme.Splash", MainLauncher = true, NoHistory = true, Icon = "@mipmap/icon")]
+    [Activity(Theme = Config.SplashTheme, MainLauncher = true, NoHistory = true)]
     public class SplashScreenActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
