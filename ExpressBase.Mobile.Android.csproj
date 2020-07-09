@@ -66,7 +66,7 @@
     <AndroidLinkTool>proguard</AndroidLinkTool>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <AndroidDexTool>d8</AndroidDexTool>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
   </PropertyGroup>
@@ -251,6 +251,39 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-mdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-xhdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-xxhdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-xxxhdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\SplashScreenMO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\SplashScreenMO.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

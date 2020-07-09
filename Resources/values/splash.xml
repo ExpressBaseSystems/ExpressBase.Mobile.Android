@@ -6,4 +6,10 @@
     <item name="android:windowTranslucentStatus">true</item>
     <item name="android:windowFullscreen">true</item>
   </style>
+  <style name="Theme.SplashMO" parent="android:Theme">
+    <item name="android:windowBackground">@drawable/SplashScreenMO</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:windowFullscreen">true</item>
+  </style>
 </resources>
