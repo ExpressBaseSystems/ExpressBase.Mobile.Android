@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.OS;
+using Android.Views;
 using ExpressBase.Mobile.Configuration;
 
 namespace ExpressBase.Mobile.Droid
@@ -9,8 +10,10 @@ namespace ExpressBase.Mobile.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            Window.DecorView.SystemUiVisibility = (StatusBarVisibility)((int)Window.DecorView.SystemUiVisibility ^ (int)SystemUiFlags.LayoutStable ^ (int)SystemUiFlags.LayoutFullscreen);
+            Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
+            Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
             base.OnCreate(bundle);
-            System.Threading.Thread.Sleep(100);
             this.StartActivity(typeof(MainActivity));
         }
     }
