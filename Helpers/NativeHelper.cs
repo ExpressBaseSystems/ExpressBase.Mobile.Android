@@ -26,7 +26,6 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 if (!string.IsNullOrWhiteSpace(_devoiceid))
                     return _devoiceid;
 
-                _devoiceid = Android.OS.Build.Serial;
                 if (string.IsNullOrWhiteSpace(_devoiceid) || _devoiceid == Build.Unknown || _devoiceid == "0")
                 {
                     try
