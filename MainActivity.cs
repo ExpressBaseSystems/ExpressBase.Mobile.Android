@@ -28,13 +28,13 @@ namespace ExpressBase.Mobile.Droid
 
             LoadApplication(new App());
 
-            if (ExpressBase.Mobile.Configuration.Config.NFEnabled)
+            if (ExpressBase.Mobile.Configuration.EbBuildConfig.NFEnabled)
             {
                 IsPlayServicesAvailable();
                 CreateNotificationChannel();
             }
 
-            this.SetStatusBarColor(Android.Graphics.Color.ParseColor(ExpressBase.Mobile.Configuration.Config.StatusBarColor));
+            this.SetStatusBarColor(Android.Graphics.Color.ParseColor(ExpressBase.Mobile.Configuration.EbBuildConfig.StatusBarColor));
 
             // Enable scrolling to the page when the keyboard is enabled
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);

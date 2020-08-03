@@ -5,7 +5,7 @@ using ExpressBase.Mobile.Configuration;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Theme = Config.SplashTheme, MainLauncher = true, NoHistory = true)]
+    [Activity(Theme = EbBuildConfig.SplashTheme, MainLauncher = true, NoHistory = true)]
     public class SplashScreenActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
