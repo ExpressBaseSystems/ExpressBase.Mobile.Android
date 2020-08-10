@@ -10,11 +10,14 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericTextBoxRenderer))]
 [assembly: ExportRenderer(typeof(TextArea), typeof(TextAreaRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
+[assembly: ExportRenderer(typeof(CustomTimePicker), typeof(CustomTimePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 [assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
 [assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
 [assembly: ExportRenderer(typeof(InputGroup), typeof(InputGroupRenderer))]
 [assembly: ExportRenderer(typeof(HiddenEntry), typeof(HiddenEntryRenderer))]
+
+
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     class TextBoxRenderer : EntryRenderer
@@ -112,6 +115,33 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.DatePicker> e)
+        {
+            base.OnElementChanged(e);
+
+            if (Control != null)
+            {
+                var ctrl = e.NewElement as IEbCustomControl;
+
+                GradientDrawable gd = new GradientDrawable();
+                gd.SetShape(ShapeType.Rectangle);
+                gd.SetCornerRadius(ctrl.BorderRadius);
+
+                if (ctrl.BorderColor != null)
+                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
+
+                if (ctrl.BgColor != null)
+                    gd.SetColor(ctrl.BgColor.ToAndroid());
+
+                Control.SetBackground(gd);
+            }
+        }
+    }
+
+    public class CustomTimePickerRenderer : TimePickerRenderer
+    {
+        public CustomTimePickerRenderer(Context context) : base(context) { }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.TimePicker> e)
         {
             base.OnElementChanged(e);
 
