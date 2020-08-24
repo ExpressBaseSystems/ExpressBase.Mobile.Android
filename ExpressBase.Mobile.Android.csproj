@@ -67,7 +67,7 @@
     <AndroidLinkTool>proguard</AndroidLinkTool>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <AndroidDexTool>dx</AndroidDexTool>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
     <LangVersion>8.0</LangVersion>
@@ -120,6 +120,7 @@
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
+    <Compile Include="Helpers\ToastMessage.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

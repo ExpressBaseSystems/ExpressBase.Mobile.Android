@@ -8,6 +8,9 @@ using Android.Util;
 using Android.Gms.Common;
 using System;
 using Android.Content;
+using Android.Views;
+using System.Linq;
+using ExpressBase.Mobile.CustomControls;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -28,7 +31,7 @@ namespace ExpressBase.Mobile.Droid
 
             LoadApplication(new App());
 
-            if (ExpressBase.Mobile.Configuration.EbBuildConfig.NFEnabled)
+            if (Configuration.EbBuildConfig.NFEnabled)
             {
                 IsPlayServicesAvailable();
                 CreateNotificationChannel();

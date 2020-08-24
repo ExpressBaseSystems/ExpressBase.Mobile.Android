@@ -33,7 +33,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                EbLog.Write(e.Message);
+                EbLog.Error(e.Message);
             }
             return 0;
         }
@@ -53,7 +53,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception ex)
             {
-                EbLog.Write(ex.Message);
+                EbLog.Error(ex.Message);
             }
         }
 
@@ -78,7 +78,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                EbLog.Write(e.Message);
+                EbLog.Error(e.Message);
             }
             return dt;
         }
@@ -111,7 +111,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception ex)
             {
-                EbLog.Write("DataBaseAndroid.DoQueries---" + ex.Message);
+                EbLog.Error("DataBaseAndroid.DoQueries---" + ex.Message);
             }
             return ds;
         }
@@ -132,7 +132,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                EbLog.Write(e.Message);
+                EbLog.Error(e.Message);
             }
             return 0;
         }
@@ -179,7 +179,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                EbLog.Write(e.Message);
+                EbLog.Error(e.Message);
             }
         }
 
@@ -199,7 +199,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception e)
             {
-                EbLog.Write(e.Message);
+                EbLog.Error(e.Message);
             }
             return null;
         }
@@ -231,7 +231,7 @@ namespace ExpressBase.Mobile.Droid.Data
             }
             catch (Exception ex)
             {
-                EbLog.Write(ex.Message);
+                EbLog.Error(ex.Message);
             }
         }
 

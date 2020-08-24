@@ -1,14 +1,13 @@
 ﻿using System;
 using System.IO;
 using Android.OS;
-using Android.Widget;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Enums;
 using ExpressBase.Mobile.Helpers;
 using static Android.Provider.Settings;
 
 [assembly: Xamarin.Forms.Dependency(typeof(NativeHelper))]
-[assembly: Xamarin.Forms.Dependency(typeof(ToastMessage))]
+
 namespace ExpressBase.Mobile.Droid.Helpers
 {
     public class NativeHelper : INativeHelper
@@ -53,19 +52,20 @@ namespace ExpressBase.Mobile.Droid.Helpers
             }
         }
 
-        public void CloseApp()
+        public void Close()
         {
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+            try { Process.KillProcess(Process.MyPid()); } catch { }
         }
 
-        public bool DirectoryOrFileExist(string Path, SysContentType Type)
+        public bool Exist(string Path, SysContentType Type)
         {
             try
             {
-                var pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Path}";
+                string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Path}";
+
                 if (Type == SysContentType.File)
                     return File.Exists(pathToNewFolder);
-                else if (Type == SysContentType.Directory)
+                else
                     return Directory.Exists(pathToNewFolder);
             }
             catch (Exception ex)
@@ -75,11 +75,12 @@ namespace ExpressBase.Mobile.Droid.Helpers
             return false;
         }
 
-        public string CreateDirectoryOrFile(string DirectoryPath, SysContentType Type)
+        public string Create(string DirectoryPath, SysContentType Type)
         {
             try
             {
                 string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{DirectoryPath}";
+
                 if (Type == SysContentType.Directory)
                     Directory.CreateDirectory(pathToNewFolder);
                 else
@@ -94,7 +95,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             return null;
         }
 
-        public byte[] GetPhoto(string url)
+        public byte[] GetFile(string url)
         {
             try
             {
@@ -114,7 +115,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             return Directory.GetFiles(path, Pattern);
         }
 
-        public string GetBaseURl()
+        public string GetAssetsURl()
         {
             return "file:///android_asset/";
         }
@@ -124,13 +125,14 @@ namespace ExpressBase.Mobile.Droid.Helpers
             try
             {
                 string sid = App.Settings.Sid.ToUpper();
+                string root = App.Settings.AppDirectory;
 
-                string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/ExpressBase/{sid}/logs.txt";
+                string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{root}/{sid}/logs.txt";
 
                 // Create a string array with the additional lines of text
                 string[] lines = {
                     $"CREATED ON { DateTime.UtcNow }",
-                    $"{logType.ToString()} : {message}"
+                    $"{logType} : {message}"
                 };
 
                 File.AppendAllLines(path, lines);
@@ -139,14 +141,6 @@ namespace ExpressBase.Mobile.Droid.Helpers
             {
                 Console.WriteLine(x.Message);
             }
-        }
-    }
-
-    public class ToastMessage : IToast
-    {
-        public void Show(string message)
-        {
-            Android.Widget.Toast.MakeText(Android.App.Application.Context, message, ToastLength.Long).Show();
         }
     }
 }
