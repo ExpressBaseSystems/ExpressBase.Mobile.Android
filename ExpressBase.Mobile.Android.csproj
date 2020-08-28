@@ -67,10 +67,10 @@
     <AndroidLinkTool>proguard</AndroidLinkTool>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <AndroidDexTool>dx</AndroidDexTool>
-    <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
     <LangVersion>8.0</LangVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
