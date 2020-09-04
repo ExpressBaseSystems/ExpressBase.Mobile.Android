@@ -131,8 +131,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
 
                 // Create a string array with the additional lines of text
                 string[] lines = {
-                    $"CREATED ON { DateTime.UtcNow }",
-                    $"{logType} : {message}"
+                    $"{ DateTime.UtcNow } | {logType} | {message}"
                 };
 
                 File.AppendAllLines(path, lines);
