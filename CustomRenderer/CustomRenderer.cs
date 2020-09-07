@@ -12,7 +12,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomTimePicker), typeof(CustomTimePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
-[assembly: ExportRenderer(typeof(CustomSearchBar), typeof(CustomSearchRenderer))]
+[assembly: ExportRenderer(typeof(ListViewSearchBar), typeof(CustomSearchRenderer))]
 [assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
 [assembly: ExportRenderer(typeof(InputGroup), typeof(InputGroupRenderer))]
 [assembly: ExportRenderer(typeof(HiddenEntry), typeof(HiddenEntryRenderer))]
@@ -196,37 +196,37 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
     public class CustomSearchRenderer : SearchBarRenderer
     {
-        public CustomSearchRenderer(Context context) : base(context)
-        {
+        public CustomSearchRenderer(Context context) : base(context) { }
 
-        }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.SearchBar> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<SearchBar> e)
         {
             base.OnElementChanged(e);
 
             if (Control != null)
             {
-                LinearLayout linearLayout = this.Control.GetChildAt(0) as LinearLayout;
-                linearLayout = linearLayout.GetChildAt(2) as LinearLayout;
-                linearLayout = linearLayout.GetChildAt(1) as LinearLayout;
+                RemoveUnderLine();
 
-                linearLayout.Background = null; //removes underline
+                var ctrl = e.NewElement as ListViewSearchBar;
 
-                var ctrl = e.NewElement as IEbCustomControl;
-
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetCornerRadius(ctrl.BorderRadius);
-
-                if (ctrl.BorderColor != null)
-                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-
-                if (ctrl.BgColor != null)
-                    gd.SetColor(ctrl.BgColor.ToAndroid());
-
-                Control.SetBackground(gd);
+                if (ctrl.HideIcon)
+                {
+                    this.HideSearchIcon();
+                }
             }
+        }
+
+        private void RemoveUnderLine()
+        {
+            int plateId = Resources.GetIdentifier("android:id/search_plate", null, null);
+            var plate = Control.FindViewById(plateId);
+            plate.SetBackgroundColor(Android.Graphics.Color.Transparent);
+        }
+
+        private void HideSearchIcon()
+        {
+            int searchIconId = Context.Resources.GetIdentifier("android:id/search_mag_icon", null, null);
+            var icon = (ImageView)Control.FindViewById(searchIconId);
+            icon.LayoutParameters = new LinearLayout.LayoutParams(0, 0);
         }
     }
 
