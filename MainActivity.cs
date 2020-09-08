@@ -6,11 +6,11 @@ using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Plugin.Media;
 using Android.Util;
 using Android.Gms.Common;
-using System;
 using Android.Content;
 using Android.Views;
 using System.Linq;
-using ExpressBase.Mobile.CustomControls;
+using Xamarin.Forms;
+using ExpressBase.Mobile.Views.Base;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -37,13 +37,13 @@ namespace ExpressBase.Mobile.Droid
                 CreateNotificationChannel();
             }
 
-            this.SetStatusBarColor(Android.Graphics.Color.ParseColor(ExpressBase.Mobile.Configuration.EbBuildConfig.StatusBarColor));
+            this.SetStatusBarColor(Android.Graphics.Color.ParseColor(Configuration.EbBuildConfig.StatusBarColor));
 
             // Enable scrolling to the page when the keyboard is enabled
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             global::ZXing.Net.Mobile.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -102,7 +102,7 @@
       <Version>71.1740.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.7.0.1239</Version>
+      <Version>4.8.0.1364</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Auth">
       <Version>71.1600.4</Version>
@@ -122,6 +122,7 @@
     <Compile Include="CustomRenderer\ImageCircleRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
+    <Compile Include="Helpers\KeyBoardHelper.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
     <Compile Include="Helpers\ToastMessage.cs" />
     <Compile Include="MainActivity.cs" />
