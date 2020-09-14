@@ -17,7 +17,8 @@
   <style name="Theme.SplashKS" parent="android:Theme">
     <item name="android:windowBackground">@drawable/SplashScreenKS</item>
     <item name="android:windowNoTitle">true</item>
-    <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:statusBarColor">#1A000000</item>
+    <item name="windowActionModeOverlay">true</item>
     <item name="android:windowFullscreen">true</item>
   </style>
 </resources>
