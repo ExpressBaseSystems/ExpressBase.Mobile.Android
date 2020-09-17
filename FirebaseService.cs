@@ -5,8 +5,11 @@ using Firebase.Messaging;
 using Android.Support.V4.App;
 using ExpressBase.Mobile.Helpers;
 using ExpressBase.Mobile.Constants;
+using ExpressBase.Mobile.Models;
 using System;
 using Android.OS;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -23,44 +26,81 @@ namespace ExpressBase.Mobile.Droid
         {
             base.OnMessageReceived(message);
 
-            string messageBody;
+            RemoteMessage.Notification nfc = message.GetNotification();
 
-            if (message.GetNotification() != null)
+            if (nfc != null)
             {
-                messageBody = message.GetNotification().Body;
+                EbNFData nf = new EbNFData { Message = nfc.Body };
+                this.SendLocalNotification(nf);
             }
             else
             {
-                messageBody = message.Data.Values.First();
+                try
+                {
+                    if (message.Data.Count > 0)
+                    {
+                        EbNFData nfData = this.CreateNFTemplate(message.Data);
+                        this.SendLocalNotification(nfData);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    EbLog.Error("error on deserializing EbNFData");
+                    EbLog.Error(ex.Message);
+                }
             }
-            SendLocalNotification(messageBody);
         }
 
-        void SendLocalNotification(string body)
+        EbNFData CreateNFTemplate(IDictionary<string, string> data)
+        {
+            EbNFData nf = new EbNFData();
+
+            if (data.ContainsKey("Title"))
+                nf.Title = data["Title"];
+
+            if(data.ContainsKey("Message"))
+                nf.Message = data["Message"];
+
+            if (data.ContainsKey("Link"))
+            {
+                try
+                {
+                    nf.Link = JsonConvert.DeserializeObject<EbNFLink>(data["Link"]);
+                }
+                catch(Exception ex)
+                {
+                    EbLog.Error("error on deserializing EbNFLink");
+                    EbLog.Error(ex.Message);
+                }
+            }
+            return nf;
+        }
+
+        void SendLocalNotification(EbNFData data)
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
-            intent.PutExtra("message", body);
 
-            //Unique request code to avoid PendingIntent collision.
             var requestCode = new Random().Next();
             var pendingIntent = PendingIntent.GetActivity(this, requestCode, intent, PendingIntentFlags.OneShot);
 
-            var notificationBuilder = new NotificationCompat.Builder(this, NFConstants.Channel)
-                .SetContentTitle(NFConstants.Title)
-                .SetSmallIcon(Resource.Drawable.ic_launcher)
-                .SetContentText(body)
-                .SetAutoCancel(true)
-                .SetShowWhen(false)
-                .SetContentIntent(pendingIntent);
+            var noti = new NotificationCompat.Builder(this, NFConstants.Channel);
+
+            noti.SetContentTitle(data.Title);
+            noti.SetContentText(data.Message);
+            noti.SetSmallIcon(Resource.Drawable.ic_launcher);
+            noti.SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
+            noti.SetAutoCancel(false);
+            noti.SetShowWhen(true);
+            noti.SetContentIntent(pendingIntent);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                notificationBuilder.SetChannelId(NFConstants.Channel);
+                noti.SetChannelId(NFConstants.Channel);
             }
 
-            var notificationManager = NotificationManager.FromContext(this);
-            notificationManager.Notify(0, notificationBuilder.Build());
+            var manager = NotificationManager.FromContext(this);
+            manager.Notify(0, noti.Build());
         }
     }
 }
