@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Firebase.Messaging;
 using Android.Support.V4.App;
@@ -37,13 +36,13 @@ namespace ExpressBase.Mobile.Droid
             {
                 try
                 {
-                    if (message.Data.Count > 0)
+                    if (message.Data?.Count > 0)
                     {
                         EbNFData nfData = this.CreateNFTemplate(message.Data);
                         this.SendLocalNotification(nfData);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     EbLog.Error("error on deserializing EbNFData");
                     EbLog.Error(ex.Message);
@@ -58,7 +57,7 @@ namespace ExpressBase.Mobile.Droid
             if (data.ContainsKey("Title"))
                 nf.Title = data["Title"];
 
-            if(data.ContainsKey("Message"))
+            if (data.ContainsKey("Message"))
                 nf.Message = data["Message"];
 
             if (data.ContainsKey("Link"))
@@ -67,7 +66,7 @@ namespace ExpressBase.Mobile.Droid
                 {
                     nf.Link = JsonConvert.DeserializeObject<EbNFLink>(data["Link"]);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     EbLog.Error("error on deserializing EbNFLink");
                     EbLog.Error(ex.Message);
@@ -80,27 +79,28 @@ namespace ExpressBase.Mobile.Droid
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
+            intent.PutExtra("nf_data", JsonConvert.SerializeObject(data));
 
             var requestCode = new Random().Next();
             var pendingIntent = PendingIntent.GetActivity(this, requestCode, intent, PendingIntentFlags.OneShot);
 
-            var noti = new NotificationCompat.Builder(this, NFConstants.Channel);
+            var noti = new NotificationCompat.Builder(this, NFConstants.ChannelId);
 
             noti.SetContentTitle(data.Title);
             noti.SetContentText(data.Message);
             noti.SetSmallIcon(Resource.Drawable.ic_launcher);
             noti.SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
-            noti.SetAutoCancel(false);
+            noti.SetAutoCancel(true);
             noti.SetShowWhen(true);
             noti.SetContentIntent(pendingIntent);
 
             if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
-                noti.SetChannelId(NFConstants.Channel);
+                noti.SetChannelId(NFConstants.ChannelId);
             }
 
             var manager = NotificationManager.FromContext(this);
-            manager.Notify(0, noti.Build());
+            manager.Notify(requestCode, noti.Build());
         }
     }
 }
