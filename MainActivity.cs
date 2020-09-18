@@ -17,6 +17,8 @@ namespace ExpressBase.Mobile.Droid
         LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        public const string EbNFDataKey = "nf_data";
+
         App application;
 
         protected override async void OnCreate(Bundle savedInstanceState)
@@ -34,7 +36,7 @@ namespace ExpressBase.Mobile.Droid
             EbNFData nfData = null;
             if (Intent.Extras != null)
             {
-                string nf_string = Intent.Extras.GetString("nf_data");
+                string nf_string = Intent.Extras.GetString(EbNFDataKey);
 
                 if (nf_string != null)
                 {
@@ -69,7 +71,7 @@ namespace ExpressBase.Mobile.Droid
 
             if (intent?.Extras != null)
             {
-                string nf_data = intent.GetStringExtra("nf_data");
+                string nf_data = intent.GetStringExtra(EbNFDataKey);
 
                 if (nf_data != null)
                 {

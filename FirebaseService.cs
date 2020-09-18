@@ -9,6 +9,7 @@ using System;
 using Android.OS;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ExpressBase.Mobile.Configuration;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -38,7 +39,7 @@ namespace ExpressBase.Mobile.Droid
                 {
                     if (message.Data?.Count > 0)
                     {
-                        EbNFData nfData = this.CreateNFTemplate(message.Data);
+                        EbNFData nfData = new EbNFData(message.Data);
                         this.SendLocalNotification(nfData);
                     }
                 }
@@ -50,36 +51,11 @@ namespace ExpressBase.Mobile.Droid
             }
         }
 
-        EbNFData CreateNFTemplate(IDictionary<string, string> data)
-        {
-            EbNFData nf = new EbNFData();
-
-            if (data.ContainsKey("Title"))
-                nf.Title = data["Title"];
-
-            if (data.ContainsKey("Message"))
-                nf.Message = data["Message"];
-
-            if (data.ContainsKey("Link"))
-            {
-                try
-                {
-                    nf.Link = JsonConvert.DeserializeObject<EbNFLink>(data["Link"]);
-                }
-                catch (Exception ex)
-                {
-                    EbLog.Error("error on deserializing EbNFLink");
-                    EbLog.Error(ex.Message);
-                }
-            }
-            return nf;
-        }
-
         void SendLocalNotification(EbNFData data)
         {
             var intent = new Intent(this, typeof(MainActivity));
             intent.AddFlags(ActivityFlags.ClearTop);
-            intent.PutExtra("nf_data", JsonConvert.SerializeObject(data));
+            intent.PutExtra(MainActivity.EbNFDataKey, JsonConvert.SerializeObject(data));
 
             var requestCode = new Random().Next();
             var pendingIntent = PendingIntent.GetActivity(this, requestCode, intent, PendingIntentFlags.OneShot);
@@ -88,7 +64,7 @@ namespace ExpressBase.Mobile.Droid
 
             noti.SetContentTitle(data.Title);
             noti.SetContentText(data.Message);
-            noti.SetSmallIcon(Resource.Drawable.ic_launcher);
+            noti.SetSmallIcon(GetIcon());
             noti.SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
             noti.SetAutoCancel(true);
             noti.SetShowWhen(true);
@@ -101,6 +77,20 @@ namespace ExpressBase.Mobile.Droid
 
             var manager = NotificationManager.FromContext(this);
             manager.Notify(requestCode, noti.Build());
+        }
+
+        int GetIcon()
+        {
+            EbAppVendors vendor = EbBuildConfig.GetVendor();
+
+            if (vendor == EbAppVendors.ExpressBase)
+                return Resource.Drawable.icon_eb;
+            else if (vendor == EbAppVendors.MoveOn)
+                return Resource.Drawable.icon_mo;
+            else if (vendor == EbAppVendors.kudumbaShree)
+                return Resource.Drawable.icon_ks;
+            else
+                return Resource.Drawable.ic_launcher;
         }
     }
 }
