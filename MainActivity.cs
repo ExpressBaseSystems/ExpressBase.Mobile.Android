@@ -53,6 +53,9 @@ namespace ExpressBase.Mobile.Droid
                 CreateNotificationChannel();
             }
 
+            //Intent intent = new Intent(this, typeof(SMSBroadCastReceiver));
+            //StartService(intent);
+
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor(Configuration.EbBuildConfig.StatusBarColor));
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
         }

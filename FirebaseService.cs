@@ -7,7 +7,6 @@ using ExpressBase.Mobile.Constants;
 using ExpressBase.Mobile.Models;
 using System;
 using Android.OS;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using ExpressBase.Mobile.Configuration;
 

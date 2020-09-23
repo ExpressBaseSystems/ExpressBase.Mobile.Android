@@ -70,7 +70,7 @@
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
     <LangVersion>8.0</LangVersion>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -123,9 +123,11 @@
     <Compile Include="CustomRenderer\ImageCircleRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
+    <Compile Include="Helpers\HashKeyAndroid.cs" />
     <Compile Include="Helpers\KeyBoardHelper.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
     <Compile Include="Helpers\Script\CSharpScriptHelper.cs" />
+    <Compile Include="Helpers\SMSBroadCastReceiver.cs" />
     <Compile Include="Helpers\ToastMessage.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
