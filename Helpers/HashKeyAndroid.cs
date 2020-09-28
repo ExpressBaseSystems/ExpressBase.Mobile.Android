@@ -63,7 +63,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
 
                 return base64Hash;
             }
-            catch (NoSuchAlgorithmException e)
+            catch (NoSuchAlgorithmException)
             {
                 return null;
             }
