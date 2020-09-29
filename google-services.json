@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "308995970030",
-    "firebase_url": "https://eb-firebase-1.firebaseio.com",
-    "project_id": "eb-firebase-1",
-    "storage_bucket": "eb-firebase-1.appspot.com"
+    "project_number": "326636037263",
+    "firebase_url": "https://moveon-95f65.firebaseio.com",
+    "project_id": "moveon-95f65",
+    "storage_bucket": "moveon-95f65.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:308995970030:android:aeb5365c46e087077c74ff",
+        "mobilesdk_app_id": "1:326636037263:android:8c3f21ff8f37764c4d3cfa",
         "android_client_info": {
-          "package_name": "com.expressbase.R_Mad"
+          "package_name": "com.moveon.R_Mad"
         }
       },
       "oauth_client": [
         {
-          "client_id": "308995970030-l332lpdkq4ii8gn05qb2j9c1apq06k9e.apps.googleusercontent.com",
+          "client_id": "326636037263-fq2a2v2b2p944lqciess653nrb63hc4l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDxZEHdufF6Y1JrwzXigc6X-7Be_qTVkv8"
+          "current_key": "AIzaSyCX0PF-PGDxG_aIdtfa3cjJX4tosyxXh98"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "308995970030-l332lpdkq4ii8gn05qb2j9c1apq06k9e.apps.googleusercontent.com",
+              "client_id": "326636037263-fq2a2v2b2p944lqciess653nrb63hc4l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

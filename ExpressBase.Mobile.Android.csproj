@@ -121,6 +121,8 @@
   <ItemGroup>
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
     <Compile Include="CustomRenderer\ImageCircleRenderer.cs" />
+    <Compile Include="CustomRenderer\NumericTextBoxRenderer.cs" />
+    <Compile Include="CustomRenderer\TextBoxRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
     <Compile Include="Helpers\HashKeyAndroid.cs" />

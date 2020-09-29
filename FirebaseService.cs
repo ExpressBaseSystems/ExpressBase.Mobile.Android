@@ -61,9 +61,11 @@ namespace ExpressBase.Mobile.Droid
 
             var noti = new NotificationCompat.Builder(this, NFConstants.ChannelId);
 
+            int icon = GetIcon();
+
             noti.SetContentTitle(data.Title);
             noti.SetContentText(data.Message);
-            noti.SetSmallIcon(GetIcon());
+            noti.SetSmallIcon(icon);
             noti.SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
             noti.SetAutoCancel(true);
             noti.SetShowWhen(true);
