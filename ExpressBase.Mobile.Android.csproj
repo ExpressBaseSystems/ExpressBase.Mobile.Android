@@ -122,10 +122,12 @@
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
     <Compile Include="CustomRenderer\ImageCircleRenderer.cs" />
     <Compile Include="CustomRenderer\NumericTextBoxRenderer.cs" />
+    <Compile Include="CustomRenderer\TextAreaRenderer.cs" />
     <Compile Include="CustomRenderer\TextBoxRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
     <Compile Include="Helpers\HashKeyAndroid.cs" />
+    <Compile Include="Helpers\InstalReferrerReceiver.cs" />
     <Compile Include="Helpers\KeyBoardHelper.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
     <Compile Include="Helpers\Script\CSharpScriptHelper.cs" />

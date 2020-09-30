@@ -6,7 +6,6 @@ using ExpressBase.Mobile.Droid.CustomRenderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(TextArea), typeof(TextAreaRenderer))]
 [assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomTimePicker), typeof(CustomTimePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
@@ -17,35 +16,6 @@ using Xamarin.Forms.Platform.Android;
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    class TextAreaRenderer : EditorRenderer
-    {
-        public TextAreaRenderer(Context context) : base(context)
-        {
-        }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
-        {
-            base.OnElementChanged(e);
-
-            if (Control != null)
-            {
-                var ctrl = e.NewElement as IEbCustomControl;
-
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetCornerRadius(ctrl.BorderRadius);
-
-                if (ctrl.BorderColor != null)
-                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-
-                if (ctrl.BgColor != null)
-                    gd.SetColor(ctrl.BgColor.ToAndroid());
-
-                Control.SetBackground(gd);
-            }
-        }
-    }
-
     public class CustomDatePickerRenderer : DatePickerRenderer
     {
         public CustomDatePickerRenderer(Context context) : base(context)
