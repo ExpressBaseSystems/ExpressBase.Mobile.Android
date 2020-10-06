@@ -70,11 +70,10 @@
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
     <LangVersion>8.0</LangVersion>
-    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
-    <Reference Include="Mono.CSharp" />
     <Reference Include="Mono.Data.Sqlite" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -130,7 +129,6 @@
     <Compile Include="Helpers\InstalReferrerReceiver.cs" />
     <Compile Include="Helpers\KeyBoardHelper.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
-    <Compile Include="Helpers\Script\CSharpScriptHelper.cs" />
     <Compile Include="Helpers\SMSBroadCastReceiver.cs" />
     <Compile Include="Helpers\ToastMessage.cs" />
     <Compile Include="MainActivity.cs" />
@@ -365,5 +363,6 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\back_btn.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
