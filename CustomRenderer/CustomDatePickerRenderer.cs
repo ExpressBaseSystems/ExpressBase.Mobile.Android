@@ -6,20 +6,20 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(TextBox), typeof(TextBoxRenderer))]
+[assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    class TextBoxRenderer : EntryRenderer
+    public class CustomDatePickerRenderer : DatePickerRenderer
     {
         readonly GradientDrawable drawable;
 
-        public TextBoxRenderer(Context context) : base(context)
+        public CustomDatePickerRenderer(Context context) : base(context)
         {
             drawable = new GradientDrawable();
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.DatePicker> e)
         {
             base.OnElementChanged(e);
 
@@ -37,14 +37,6 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                     drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
 
                 Control.SetBackground(drawable);
-
-                TextBox textbox = e.NewElement as TextBox;
-
-                if (textbox.EnableFocus)
-                {
-                    textbox.Focused += Textbox_Focused;
-                    textbox.Unfocused += Textbox_Unfocused;
-                }
             }
         }
 
@@ -52,22 +44,10 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
-            if (e.PropertyName == TextBox.XBackgroundColorProperty.PropertyName)
+            if (e.PropertyName == CustomDatePicker.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as TextBox).XBackgroundColor.ToAndroid());
+                drawable.SetColor((sender as CustomDatePicker).XBackgroundColor.ToAndroid());
             }
-        }
-
-        private void Textbox_Unfocused(object sender, FocusEventArgs e)
-        {
-            var ctrl = (TextBox)sender;
-            drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-        }
-
-        private void Textbox_Focused(object sender, FocusEventArgs e)
-        {
-            var ctrl = (TextBox)sender;
-            drawable.SetStroke(2, ctrl.BorderOnFocus.ToAndroid());
         }
     }
 }

@@ -6,8 +6,6 @@ using ExpressBase.Mobile.Droid.CustomRenderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
-[assembly: ExportRenderer(typeof(CustomTimePicker), typeof(CustomTimePickerRenderer))]
 [assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 [assembly: ExportRenderer(typeof(ListViewSearchBar), typeof(CustomSearchRenderer))]
 [assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
@@ -16,63 +14,6 @@ using Xamarin.Forms.Platform.Android;
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    public class CustomDatePickerRenderer : DatePickerRenderer
-    {
-        public CustomDatePickerRenderer(Context context) : base(context)
-        {
-
-        }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.DatePicker> e)
-        {
-            base.OnElementChanged(e);
-
-            if (Control != null)
-            {
-                var ctrl = e.NewElement as IEbCustomControl;
-
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetCornerRadius(ctrl.BorderRadius);
-
-                if (ctrl.BorderColor != null)
-                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-
-                if (ctrl.BgColor != null)
-                    gd.SetColor(ctrl.BgColor.ToAndroid());
-
-                Control.SetBackground(gd);
-            }
-        }
-    }
-
-    public class CustomTimePickerRenderer : TimePickerRenderer
-    {
-        public CustomTimePickerRenderer(Context context) : base(context) { }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.TimePicker> e)
-        {
-            base.OnElementChanged(e);
-
-            if (Control != null)
-            {
-                var ctrl = e.NewElement as IEbCustomControl;
-
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetCornerRadius(ctrl.BorderRadius);
-
-                if (ctrl.BorderColor != null)
-                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-
-                if (ctrl.BgColor != null)
-                    gd.SetColor(ctrl.BgColor.ToAndroid());
-
-                Control.SetBackground(gd);
-            }
-        }
-    }
-
     public class CustomSelectRenderer : PickerRenderer
     {
         public CustomSelectRenderer(Context context) : base(context)
@@ -95,8 +36,8 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                 if (ctrl.BorderColor != null)
                     gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
 
-                if (ctrl.BgColor != null)
-                    gd.SetColor(ctrl.BgColor.ToAndroid());
+                if (ctrl.XBackgroundColor != null)
+                    gd.SetColor(ctrl.XBackgroundColor.ToAndroid());
 
                 Control.SetBackground(gd);
             }
@@ -172,8 +113,8 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             if (ctrl.BorderColor != null)
                 gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
 
-            if (ctrl.BgColor != null)
-                gd.SetColor(ctrl.BgColor.ToAndroid());
+            if (ctrl.XBackgroundColor != null)
+                gd.SetColor(ctrl.XBackgroundColor.ToAndroid());
 
             this.SetBackground(gd);
         }

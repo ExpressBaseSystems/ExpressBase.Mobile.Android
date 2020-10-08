@@ -2,6 +2,7 @@
 using Android.Graphics.Drawables;
 using ExpressBase.Mobile.CustomControls;
 using ExpressBase.Mobile.Droid.CustomRenderer;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -32,8 +33,8 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                 if (ctrl.BorderColor != null)
                     drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
 
-                if (ctrl.BgColor != null)
-                    drawable.SetColor(ctrl.BgColor.ToAndroid());
+                if (ctrl.XBackgroundColor != null)
+                    drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
 
                 Control.SetBackground(drawable);
 
@@ -44,6 +45,16 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                     textbox.Focused += Textbox_Focused;
                     textbox.Unfocused += Textbox_Unfocused;
                 }
+            }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == TextArea.XBackgroundColorProperty.PropertyName)
+            {
+                drawable.SetColor((sender as TextArea).XBackgroundColor.ToAndroid());
             }
         }
 

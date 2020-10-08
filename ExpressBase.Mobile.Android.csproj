@@ -118,7 +118,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomRenderer\CustomDatePickerRenderer.cs" />
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
+    <Compile Include="CustomRenderer\CustomTimePickerRenderer.cs" />
     <Compile Include="CustomRenderer\ImageCircleRenderer.cs" />
     <Compile Include="CustomRenderer\NumericTextBoxRenderer.cs" />
     <Compile Include="CustomRenderer\TextAreaRenderer.cs" />
