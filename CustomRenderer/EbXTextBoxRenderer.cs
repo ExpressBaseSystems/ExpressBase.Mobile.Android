@@ -6,15 +6,15 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(NumericTextBox), typeof(NumericTextBoxRenderer))]
+[assembly: ExportRenderer(typeof(EbXTextBox), typeof(EbXTextBoxRenderer))]
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    class NumericTextBoxRenderer : EntryRenderer
+    class EbXTextBoxRenderer : EntryRenderer
     {
         readonly GradientDrawable drawable;
 
-        public NumericTextBoxRenderer(Context context) : base(context)
+        public EbXTextBoxRenderer(Context context) : base(context)
         {
             drawable = new GradientDrawable();
         }
@@ -38,7 +38,7 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
                 Control.SetBackground(drawable);
 
-                NumericTextBox textbox = e.NewElement as NumericTextBox;
+                EbXTextBox textbox = e.NewElement as EbXTextBox;
 
                 if (textbox.EnableFocus)
                 {
@@ -52,21 +52,21 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
-            if(e.PropertyName == NumericTextBox.XBackgroundColorProperty.PropertyName)
+            if (e.PropertyName == EbXTextBox.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as NumericTextBox).XBackgroundColor.ToAndroid());
+                drawable.SetColor((sender as EbXTextBox).XBackgroundColor.ToAndroid());
             }
         }
 
         private void Textbox_Unfocused(object sender, FocusEventArgs e)
         {
-            var ctrl = (NumericTextBox)sender;
+            var ctrl = (EbXTextBox)sender;
             drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
         }
 
         private void Textbox_Focused(object sender, FocusEventArgs e)
         {
-            var ctrl = (NumericTextBox)sender;
+            var ctrl = (EbXTextBox)sender;
             drawable.SetStroke(2, ctrl.BorderOnFocus.ToAndroid());
         }
     }

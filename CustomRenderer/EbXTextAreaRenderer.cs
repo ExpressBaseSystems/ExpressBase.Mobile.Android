@@ -6,15 +6,15 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(TextArea), typeof(TextAreaRenderer))]
+[assembly: ExportRenderer(typeof(EbXTextArea), typeof(EbXTextAreaRenderer))]
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    class TextAreaRenderer : EditorRenderer
+    class EbXTextAreaRenderer : EditorRenderer
     {
         readonly GradientDrawable drawable;
 
-        public TextAreaRenderer(Context context) : base(context)
+        public EbXTextAreaRenderer(Context context) : base(context)
         {
             drawable = new GradientDrawable();
         }
@@ -38,7 +38,7 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 
                 Control.SetBackground(drawable);
 
-                TextArea textbox = e.NewElement as TextArea;
+                EbXTextArea textbox = e.NewElement as EbXTextArea;
 
                 if (textbox.EnableFocus)
                 {
@@ -52,21 +52,21 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
-            if (e.PropertyName == TextArea.XBackgroundColorProperty.PropertyName)
+            if (e.PropertyName == EbXTextArea.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as TextArea).XBackgroundColor.ToAndroid());
+                drawable.SetColor((sender as EbXTextArea).XBackgroundColor.ToAndroid());
             }
         }
 
         private void Textbox_Unfocused(object sender, FocusEventArgs e)
         {
-            var ctrl = (TextArea)sender;
+            var ctrl = (EbXTextArea)sender;
             drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
         }
 
         private void Textbox_Focused(object sender, FocusEventArgs e)
         {
-            var ctrl = (TextArea)sender;
+            var ctrl = (EbXTextArea)sender;
             drawable.SetStroke(2, ctrl.BorderOnFocus.ToAndroid());
         }
     }

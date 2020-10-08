@@ -1,49 +1,16 @@
 ﻿using Android.Content;
-using Android.Graphics.Drawables;
 using Android.Widget;
 using ExpressBase.Mobile.CustomControls;
 using ExpressBase.Mobile.Droid.CustomRenderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(CustomPicker), typeof(CustomSelectRenderer))]
 [assembly: ExportRenderer(typeof(ListViewSearchBar), typeof(CustomSearchRenderer))]
 [assembly: ExportRenderer(typeof(ComboBoxLabel), typeof(ComboLabelRenderer))]
-[assembly: ExportRenderer(typeof(InputGroup), typeof(InputGroupRenderer))]
-[assembly: ExportRenderer(typeof(HiddenEntry), typeof(HiddenEntryRenderer))]
+[assembly: ExportRenderer(typeof(EbXHiddenEntry), typeof(HiddenEntryRenderer))]
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    public class CustomSelectRenderer : PickerRenderer
-    {
-        public CustomSelectRenderer(Context context) : base(context)
-        {
-
-        }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Picker> e)
-        {
-            base.OnElementChanged(e);
-
-            if (Control != null)
-            {
-                var ctrl = e.NewElement as IEbCustomControl;
-
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetCornerRadius(ctrl.BorderRadius);
-
-                if (ctrl.BorderColor != null)
-                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-
-                if (ctrl.XBackgroundColor != null)
-                    gd.SetColor(ctrl.XBackgroundColor.ToAndroid());
-
-                Control.SetBackground(gd);
-            }
-        }
-    }
-
     public class CustomSearchRenderer : SearchBarRenderer
     {
         public CustomSearchRenderer(Context context) : base(context) { }
@@ -90,33 +57,6 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Label> e)
         {
             base.OnElementChanged(e);
-        }
-    }
-
-    public class InputGroupRenderer : FrameRenderer
-    {
-        public InputGroupRenderer(Context context) : base(context)
-        {
-
-        }
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Frame> e)
-        {
-            base.OnElementChanged(e);
-
-            var ctrl = e.NewElement as IEbCustomControl;
-
-            GradientDrawable gd = new GradientDrawable();
-            gd.SetShape(ShapeType.Rectangle);
-            gd.SetCornerRadius(ctrl.BorderRadius);
-
-            if (ctrl.BorderColor != null)
-                gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
-
-            if (ctrl.XBackgroundColor != null)
-                gd.SetColor(ctrl.XBackgroundColor.ToAndroid());
-
-            this.SetBackground(gd);
         }
     }
 

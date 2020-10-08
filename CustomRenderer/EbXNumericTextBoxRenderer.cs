@@ -6,20 +6,20 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(CustomTimePicker), typeof(CustomTimePickerRenderer))]
+[assembly: ExportRenderer(typeof(EbXNumericTextBox), typeof(EbXNumericTextBoxRenderer))]
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    public class CustomTimePickerRenderer : TimePickerRenderer
+    class EbXNumericTextBoxRenderer : EntryRenderer
     {
         readonly GradientDrawable drawable;
 
-        public CustomTimePickerRenderer(Context context) : base(context)
+        public EbXNumericTextBoxRenderer(Context context) : base(context)
         {
             drawable = new GradientDrawable();
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.TimePicker> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
         {
             base.OnElementChanged(e);
 
@@ -37,6 +37,14 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
                     drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
 
                 Control.SetBackground(drawable);
+
+                EbXNumericTextBox textbox = e.NewElement as EbXNumericTextBox;
+
+                if (textbox.EnableFocus)
+                {
+                    textbox.Focused += Textbox_Focused;
+                    textbox.Unfocused += Textbox_Unfocused;
+                }
             }
         }
 
@@ -44,10 +52,22 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
-            if (e.PropertyName == CustomTimePicker.XBackgroundColorProperty.PropertyName)
+            if(e.PropertyName == EbXNumericTextBox.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as CustomTimePicker).XBackgroundColor.ToAndroid());
+                drawable.SetColor((sender as EbXNumericTextBox).XBackgroundColor.ToAndroid());
             }
+        }
+
+        private void Textbox_Unfocused(object sender, FocusEventArgs e)
+        {
+            var ctrl = (EbXNumericTextBox)sender;
+            drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
+        }
+
+        private void Textbox_Focused(object sender, FocusEventArgs e)
+        {
+            var ctrl = (EbXNumericTextBox)sender;
+            drawable.SetStroke(2, ctrl.BorderOnFocus.ToAndroid());
         }
     }
 }

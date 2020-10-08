@@ -118,13 +118,15 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomRenderer\CustomDatePickerRenderer.cs" />
+    <Compile Include="CustomRenderer\EbXSelectRenderer.cs" />
+    <Compile Include="CustomRenderer\EbXDatePickerRenderer.cs" />
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
-    <Compile Include="CustomRenderer\CustomTimePickerRenderer.cs" />
+    <Compile Include="CustomRenderer\EbXTimePickerRenderer.cs" />
     <Compile Include="CustomRenderer\ImageCircleRenderer.cs" />
-    <Compile Include="CustomRenderer\NumericTextBoxRenderer.cs" />
-    <Compile Include="CustomRenderer\TextAreaRenderer.cs" />
-    <Compile Include="CustomRenderer\TextBoxRenderer.cs" />
+    <Compile Include="CustomRenderer\EbXNumericTextBoxRenderer.cs" />
+    <Compile Include="CustomRenderer\EbXTextAreaRenderer.cs" />
+    <Compile Include="CustomRenderer\EbXTextBoxRenderer.cs" />
+    <Compile Include="CustomRenderer\InputGroupRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
     <Compile Include="Helpers\HashKeyAndroid.cs" />

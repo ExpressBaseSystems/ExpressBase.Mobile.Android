@@ -6,20 +6,20 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(CustomDatePicker), typeof(CustomDatePickerRenderer))]
+[assembly: ExportRenderer(typeof(EbXTimePicker), typeof(EbXTimePickerRenderer))]
 
 namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
-    public class CustomDatePickerRenderer : DatePickerRenderer
+    public class EbXTimePickerRenderer : TimePickerRenderer
     {
         readonly GradientDrawable drawable;
 
-        public CustomDatePickerRenderer(Context context) : base(context)
+        public EbXTimePickerRenderer(Context context) : base(context)
         {
             drawable = new GradientDrawable();
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.DatePicker> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.TimePicker> e)
         {
             base.OnElementChanged(e);
 
@@ -44,9 +44,9 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
-            if (e.PropertyName == CustomDatePicker.XBackgroundColorProperty.PropertyName)
+            if (e.PropertyName == EbXTimePicker.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as CustomDatePicker).XBackgroundColor.ToAndroid());
+                drawable.SetColor((sender as EbXTimePicker).XBackgroundColor.ToAndroid());
             }
         }
     }
