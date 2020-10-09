@@ -2,6 +2,7 @@
 using Android.Graphics.Drawables;
 using ExpressBase.Mobile.CustomControls;
 using ExpressBase.Mobile.Droid.CustomRenderer;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -11,9 +12,11 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
 {
     public class EbXSelectRenderer : PickerRenderer
     {
+        readonly GradientDrawable drawable;
+
         public EbXSelectRenderer(Context context) : base(context)
         {
-
+            drawable = new GradientDrawable();
         }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Picker> e)
@@ -24,17 +27,26 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
             {
                 var ctrl = e.NewElement as IEbCustomControl;
 
-                GradientDrawable gd = new GradientDrawable();
-                gd.SetShape(ShapeType.Rectangle);
-                gd.SetCornerRadius(ctrl.BorderRadius);
+                drawable.SetShape(ShapeType.Rectangle);
+                drawable.SetCornerRadius(ctrl.BorderRadius);
 
                 if (ctrl.BorderColor != null)
-                    gd.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
+                    drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
 
                 if (ctrl.XBackgroundColor != null)
-                    gd.SetColor(ctrl.XBackgroundColor.ToAndroid());
+                    drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
 
-                Control.SetBackground(gd);
+                Control.SetBackground(drawable);
+            }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == EbXPicker.XBackgroundColorProperty.PropertyName)
+            {
+                drawable.SetColor((sender as EbXPicker).XBackgroundColor.ToAndroid());
             }
         }
     }
