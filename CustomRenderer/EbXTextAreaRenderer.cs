@@ -52,9 +52,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
+            var ctrl = (sender as EbXTextArea);
+
             if (e.PropertyName == EbXTextArea.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as EbXTextArea).XBackgroundColor.ToAndroid());
+                drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
+            }
+            else if (e.PropertyName == EbXTextArea.BorderColorProperty.PropertyName)
+            {
+                drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
             }
         }
 

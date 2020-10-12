@@ -44,9 +44,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
+            var ctrl = (EbXDatePicker)sender;
+
             if (e.PropertyName == EbXDatePicker.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as EbXDatePicker).XBackgroundColor.ToAndroid());
+                drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
+            }
+            else if (e.PropertyName == EbXDatePicker.BorderColorProperty.PropertyName)
+            {
+                drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
             }
         }
     }

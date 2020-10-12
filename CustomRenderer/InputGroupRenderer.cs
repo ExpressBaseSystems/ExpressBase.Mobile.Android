@@ -41,9 +41,15 @@ namespace ExpressBase.Mobile.Droid.CustomRenderer
         {
             base.OnElementPropertyChanged(sender, e);
 
+            InputGroup ctrl = (InputGroup)sender; 
+
             if (e.PropertyName == InputGroup.XBackgroundColorProperty.PropertyName)
             {
-                drawable.SetColor((sender as InputGroup).XBackgroundColor.ToAndroid());
+                drawable.SetColor(ctrl.XBackgroundColor.ToAndroid());
+            }
+            else if (e.PropertyName == InputGroup.BorderColorProperty.PropertyName)
+            {
+                drawable.SetStroke(ctrl.BorderThickness, ctrl.BorderColor.ToAndroid());
             }
         }
     }
