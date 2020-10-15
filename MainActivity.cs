@@ -9,17 +9,42 @@ using Android.Gms.Common;
 using Android.Content;
 using ExpressBase.Mobile.Models;
 using Newtonsoft.Json;
+using System;
+using Android;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Theme = "@style/MainTheme", MainLauncher = false,
+    [Activity(Theme = "@style/MainTheme", 
+        MainLauncher = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         LaunchMode = LaunchMode.SingleTop)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         public const string EbNFDataKey = "nf_data";
 
-        App application;
+        private App application;
+
+        const int RequestLocationId = 0;
+
+        readonly string[] LocationPermissions =
+        {
+            Manifest.Permission.AccessCoarseLocation,
+            Manifest.Permission.AccessFineLocation,
+            Manifest.Permission.Camera
+        };
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted)
+                {
+                    RequestPermissions(LocationPermissions, RequestLocationId);
+                }
+            }
+        }
 
         protected override async void OnCreate(Bundle savedInstanceState)
         {
@@ -32,19 +57,11 @@ namespace ExpressBase.Mobile.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             await CrossMedia.Current.Initialize();
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
 
-            EbNFData nfData = null;
-            if (Intent.Extras != null)
-            {
-                string nf_string = Intent.Extras.GetString(EbNFDataKey);
+            EbNFData ebnfData = this.GetNFDataOnCreate();
 
-                if (nf_string != null)
-                {
-                    nfData = Parse(nf_string);
-                }
-            }
-
-            application = new App(nfData);
+            application = new App(ebnfData);
             LoadApplication(application);
 
             if (Configuration.EbBuildConfig.NFEnabled)
@@ -52,9 +69,6 @@ namespace ExpressBase.Mobile.Droid
                 IsPlayServicesAvailable();
                 CreateNotificationChannel();
             }
-
-            //Intent intent = new Intent(this, typeof(SMSBroadCastReceiver));
-            //StartService(intent);
 
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor(Configuration.EbBuildConfig.StatusBarColor));
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
@@ -116,9 +130,32 @@ namespace ExpressBase.Mobile.Droid
             }
         }
 
+        private EbNFData GetNFDataOnCreate()
+        {
+            EbNFData data = null;
+
+            if (Intent.Extras != null)
+            {
+                string nf_string = Intent.Extras.GetString(EbNFDataKey);
+
+                if (nf_string != null)
+                    data = Parse(nf_string);
+            }
+            return data;
+        }
+
         private EbNFData Parse(string nfdata)
         {
-            return JsonConvert.DeserializeObject<EbNFData>(nfdata);
+            EbNFData data = null;
+            try
+            {
+                data = JsonConvert.DeserializeObject<EbNFData>(nfdata);
+            }
+            catch (Exception)
+            {
+                //NFData parsing error
+            }
+            return data;
         }
     }
 }
