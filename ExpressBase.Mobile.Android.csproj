@@ -121,6 +121,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomRenderer\EbXLabelRenderer.cs" />
     <Compile Include="CustomRenderer\EbXSelectRenderer.cs" />
     <Compile Include="CustomRenderer\EbXDatePickerRenderer.cs" />
     <Compile Include="CustomRenderer\CustomRenderer.cs" />
