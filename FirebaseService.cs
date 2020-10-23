@@ -65,6 +65,7 @@ namespace ExpressBase.Mobile.Droid
 
             noti.SetContentTitle(data.Title);
             noti.SetContentText(data.Message);
+            noti.SetStyle(new NotificationCompat.BigTextStyle().BigText(data.Message));
             noti.SetSmallIcon(icon);
             noti.SetDefaults((int)NotificationDefaults.Sound | (int)NotificationDefaults.Vibrate);
             noti.SetAutoCancel(true);
