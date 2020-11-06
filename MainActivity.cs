@@ -11,10 +11,11 @@ using ExpressBase.Mobile.Models;
 using Newtonsoft.Json;
 using System;
 using Android;
+using ExpressBase.Mobile.Services.Navigation;
 
 namespace ExpressBase.Mobile.Droid
 {
-    [Activity(Theme = "@style/MainTheme", 
+    [Activity(Theme = "@style/MainTheme",
         MainLauncher = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         LaunchMode = LaunchMode.SingleTop)]
@@ -92,7 +93,7 @@ namespace ExpressBase.Mobile.Droid
 
                 if (nf_data != null)
                 {
-                    await application?.NewIntentAction(Parse(nf_data));
+                    await NavigationService.Instance.InitRecievedIntentAction(Parse(nf_data));
                 }
             }
         }
