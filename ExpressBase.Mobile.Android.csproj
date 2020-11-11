@@ -133,6 +133,7 @@
     <Compile Include="CustomRenderer\InputGroupRenderer.cs" />
     <Compile Include="Data\DataBaseAndroid.cs" />
     <Compile Include="FirebaseService.cs" />
+    <Compile Include="Helpers\EbAudioHelper.cs" />
     <Compile Include="Helpers\HashKeyAndroid.cs" />
     <Compile Include="Helpers\InstalReferrerReceiver.cs" />
     <Compile Include="Helpers\KeyBoardHelper.cs" />

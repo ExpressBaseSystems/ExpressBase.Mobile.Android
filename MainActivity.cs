@@ -147,16 +147,12 @@ namespace ExpressBase.Mobile.Droid
 
         private EbNFData Parse(string nfdata)
         {
-            EbNFData data = null;
             try
             {
-                data = JsonConvert.DeserializeObject<EbNFData>(nfdata);
+                return JsonConvert.DeserializeObject<EbNFData>(nfdata);
             }
-            catch (Exception)
-            {
-                //NFData parsing error
-            }
-            return data;
+            catch (Exception) { }
+            return null;
         }
     }
 }
