@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Android.Media;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Helpers;
+using ExpressBase.Mobile.Views.Base;
+using Xamarin.Forms;
 
-[assembly: Xamarin.Forms.Dependency(typeof(EbAudioHelper))]
+[assembly: Dependency(typeof(EbAudioHelper))]
 
 namespace ExpressBase.Mobile.Droid.Helpers
 {
@@ -13,15 +15,17 @@ namespace ExpressBase.Mobile.Droid.Helpers
     {
         readonly string filePath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/ebaudio_temp";
 
-        public bool StopRecordingAfterTimeout { get; set; }
+        public double MaximumDuration { get; set; }
 
-        public TimeSpan TotalAudioTimeout { get; set; }
+        public event EbEventHandler OnRecordingCompleted;
+
+        public event EbEventHandler OnPlayerCompleted;
 
         MediaRecorder recorder;
-
+        System.Timers.Timer timer;
         MediaPlayer player;
 
-        public Task<string> StartRecording()
+        public Task StartRecording()
         {
             try
             {
@@ -32,61 +36,62 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 recorder = new MediaRecorder();
                 recorder.SetAudioSource(AudioSource.Mic);
                 recorder.SetOutputFormat(OutputFormat.Mpeg4);
-                recorder.SetAudioEncoder(AudioEncoder.AmrNb);
+                recorder.SetAudioEncoder(AudioEncoder.Aac);
                 recorder.SetOutputFile(filePath);
+                //recorder.SetMaxDuration(MaximumDuration);
                 recorder.Prepare();
                 recorder.Start();
+
+                WatchDuration();
             }
             catch (Exception ex)
             {
                 EbLog.Error(ex.Message);
             }
-            return Task.FromResult(filePath);
+            return Task.FromResult(false);
         }
 
-        public Task<byte[]> StopRecording()
+        public void StopRecording()
         {
-            if (recorder == null) return null;
-
-            byte[] note = null;
+            if (recorder == null) return;
             try
             {
                 recorder.Stop();
+                recorder.Reset();
                 recorder.Release();
+
+                if (timer != null && timer.Enabled) timer.Stop();
 
                 if (File.Exists(filePath))
                 {
-                    note = File.ReadAllBytes(filePath);
+                    byte[] note = File.ReadAllBytes(filePath);
+                    OnRecordingCompleted?.Invoke(note, null);
                 }
             }
             catch (Exception ex)
             {
                 EbLog.Error(ex.Message);
             }
-            return Task.FromResult(note);
         }
 
-        public Task StartPlaying(byte[] audioFile)
+        public Task<int> StartPlaying(byte[] audioFile, Button playButton)
         {
-            if (audioFile == null) 
-                return Task.FromResult(false);
+            if (audioFile == null)
+                return Task.FromResult(0);
             try
             {
                 player = new MediaPlayer();
-
-                player.Prepared += (sender, e) =>
-                {
-                    player.Start();
-                };
-                player.SetDataSource(new StreamMediaDataSource(new MemoryStream(audioFile)));
+                player.Completion += (sender, e) => OnPlayerCompleted?.Invoke(playButton, null);
+                player.SetDataSource($"data:audio;base64,{Convert.ToBase64String(audioFile)}");
                 player.Prepare();
+                player.Start();
             }
             catch (IOException ex)
             {
                 EbLog.Error("There was an error trying to start the MediaPlayer!");
                 EbLog.Error(ex.Message);
             }
-            return Task.FromResult(false);
+            return Task.FromResult(player.Duration);
         }
 
         public void StopPlaying()
@@ -94,52 +99,28 @@ namespace ExpressBase.Mobile.Droid.Helpers
             if (player == null)
                 return;
             player.Stop();
-            player.Dispose();
             player = null;
         }
-    }
 
-    public class StreamMediaDataSource : MediaDataSource
-    {
-        System.IO.Stream data;
-
-        public StreamMediaDataSource(System.IO.Stream Data)
+        private void WatchDuration()
         {
-            data = Data;
+            timer = new System.Timers.Timer(MaximumDuration);
+            timer.Elapsed += OnMaximumDurationReached;
+            timer.Start();
         }
 
-        public override long Size
+        private void OnMaximumDurationReached(object sender, System.Timers.ElapsedEventArgs e)
         {
-            get
-            {
-                return data.Length;
-            }
+            timer.Stop();
+            timer = null;
+            Device.BeginInvokeOnMainThread(() => StopRecording());
         }
 
-        public override int ReadAt(long position, byte[] buffer, int offset, int size)
+        public int GetPlayerPosition()
         {
-            data.Seek(position, System.IO.SeekOrigin.Begin);
-            return data.Read(buffer, offset, size);
-        }
-
-        public override void Close()
-        {
-            if (data != null)
-            {
-                data.Dispose();
-                data = null;
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (data != null)
-            {
-                data.Dispose();
-                data = null;
-            }
+            if (player != null)
+                return player.CurrentPosition;
+            return 0;
         }
     }
 }
