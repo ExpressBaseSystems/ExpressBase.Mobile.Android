@@ -22,7 +22,9 @@ namespace ExpressBase.Mobile.Droid.Helpers
         public event EbEventHandler OnPlayerCompleted;
 
         MediaRecorder recorder;
+
         System.Timers.Timer timer;
+
         MediaPlayer player;
 
         public Task StartRecording()
