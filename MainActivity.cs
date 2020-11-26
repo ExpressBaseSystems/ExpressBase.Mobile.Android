@@ -93,7 +93,7 @@ namespace ExpressBase.Mobile.Droid
 
                 if (nf_data != null)
                 {
-                    await NavigationService.Instance.InitRecievedIntentAction(Parse(nf_data));
+                    await NavigationService.Current.InitRecievedIntentAction(Parse(nf_data));
                 }
             }
         }
