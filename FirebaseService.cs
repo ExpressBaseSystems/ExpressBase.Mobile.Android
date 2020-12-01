@@ -83,13 +83,13 @@ namespace ExpressBase.Mobile.Droid
 
         int GetIcon()
         {
-            EbAppVendors vendor = EbBuildConfig.GetVendor();
+            string vendor = EbBuildConfig.VendorName;
 
-            if (vendor == EbAppVendors.ExpressBase)
+            if (vendor == Expressbase.VendorName)
                 return Resource.Drawable.icon_eb;
-            else if (vendor == EbAppVendors.MoveOn)
+            else if (vendor == MoveOn.VendorName)
                 return Resource.Drawable.icon_mo;
-            else if (vendor == EbAppVendors.kudumbaShree)
+            else if (vendor == KudumbaShree.VendorName)
                 return Resource.Drawable.icon_ks;
             else
                 return Resource.Drawable.ic_launcher;
