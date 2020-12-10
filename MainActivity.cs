@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System;
 using Android;
 using ExpressBase.Mobile.Services.Navigation;
+using Xamarin.Forms.Platform.Android;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -19,7 +20,7 @@ namespace ExpressBase.Mobile.Droid
         MainLauncher = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         LaunchMode = LaunchMode.SingleTop)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class MainActivity : FormsAppCompatActivity
     {
         public const string EbNFDataKey = "nf_data";
 
@@ -33,6 +34,8 @@ namespace ExpressBase.Mobile.Droid
             Manifest.Permission.AccessFineLocation,
             Manifest.Permission.Camera
         };
+
+        public static FormsAppCompatActivity Instance { get; private set; }
 
         protected override void OnStart()
         {
@@ -71,6 +74,7 @@ namespace ExpressBase.Mobile.Droid
                 CreateNotificationChannel();
             }
 
+            Instance = this;
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor(Configuration.EbBuildConfig.StatusBarColor));
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
         }

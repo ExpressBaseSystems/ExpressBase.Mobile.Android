@@ -140,6 +140,7 @@
     <Compile Include="Helpers\HashKeyAndroid.cs" />
     <Compile Include="Helpers\InstalReferrerReceiver.cs" />
     <Compile Include="Helpers\KeyBoardHelper.cs" />
+    <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
     <Compile Include="Helpers\SMSBroadCastReceiver.cs" />
     <Compile Include="Helpers\ToastMessage.cs" />
