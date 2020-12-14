@@ -221,9 +221,6 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\SplashScreen.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\WebView\DataTable.html" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\connect.jpg" />
   </ItemGroup>
   <ItemGroup>
