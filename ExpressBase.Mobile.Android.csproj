@@ -124,6 +124,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomRenderer\EbXFrameRenderer.cs" />
     <Compile Include="CustomRenderer\EbXLabelRenderer.cs" />
     <Compile Include="CustomRenderer\EbXSelectRenderer.cs" />
     <Compile Include="CustomRenderer\EbXDatePickerRenderer.cs" />
