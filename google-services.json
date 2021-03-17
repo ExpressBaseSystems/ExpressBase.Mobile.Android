@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "984945339137",
-    "project_id": "hairocraft-rmad",
-    "storage_bucket": "hairocraft-rmad.appspot.com"
+    "project_number": "308995970030",
+    "firebase_url": "https://eb-firebase-1.firebaseio.com",
+    "project_id": "eb-firebase-1",
+    "storage_bucket": "eb-firebase-1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:984945339137:android:882e3b4435d202379c8900",
+        "mobilesdk_app_id": "1:308995970030:android:aeb5365c46e087077c74ff",
         "android_client_info": {
-          "package_name": "com.hairocraft.R_Mad"
+          "package_name": "com.expressbase.R_Mad"
         }
       },
       "oauth_client": [
         {
-          "client_id": "984945339137-urblgs0j5eqp0frdbka970mbbmaa3uiq.apps.googleusercontent.com",
+          "client_id": "308995970030-l332lpdkq4ii8gn05qb2j9c1apq06k9e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDAEAiP-KmkJxChRtw5GCxq4hkyMUXSK04"
+          "current_key": "AIzaSyDxZEHdufF6Y1JrwzXigc6X-7Be_qTVkv8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "984945339137-urblgs0j5eqp0frdbka970mbbmaa3uiq.apps.googleusercontent.com",
+              "client_id": "308995970030-l332lpdkq4ii8gn05qb2j9c1apq06k9e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
