@@ -26,7 +26,7 @@ namespace ExpressBase.Mobile.Droid.Data
 
                 if (!File.Exists(dbPath))
                 {
-                    Mono.Data.Sqlite.SqliteConnection.CreateFile(dbPath);
+                    SqliteConnection.CreateFile(dbPath);
                     this.DbPath = dbPath;
                     return 1;
                 }
@@ -153,9 +153,6 @@ namespace ExpressBase.Mobile.Droid.Data
                     for (int k = 0; k < Table.Rows.Count; k++)
                     {
                         cmd.Parameters.Clear();
-
-                        if (k >= 1000)
-                            break;
 
                         for (int i = 0; i < Table.Rows[k].Count; i++)
                         {
