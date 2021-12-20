@@ -15,7 +15,7 @@ using ExpressBase.Mobile.Configuration;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-[assembly: Application(Label = EbBuildConfig.AppLabel, Debuggable = false, Icon = EbBuildConfig.AppIcon)]
+[assembly: Application(Label = EbBuildConfig.AppLabel, Debuggable = true, Icon = EbBuildConfig.AppIcon)]
 [assembly: UsesFeature("android.hardware.camera", Required = true)]
 [assembly: UsesFeature("android.hardware.camera.autofocus", Required = true)]
 [assembly: UsesPermission(Android.Manifest.Permission.AccessCoarseLocation)]
