@@ -143,6 +143,7 @@
     <Compile Include="Helpers\KeyBoardHelper.cs" />
     <Compile Include="Helpers\LocationHelper.cs" />
     <Compile Include="Helpers\NativeHelper.cs" />
+    <Compile Include="Helpers\OpenAppAndroid.cs" />
     <Compile Include="Helpers\SMSBroadCastReceiver.cs" />
     <Compile Include="Helpers\ToastMessage.cs" />
     <Compile Include="MainActivity.cs" />
