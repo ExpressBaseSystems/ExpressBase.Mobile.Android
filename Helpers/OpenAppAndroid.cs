@@ -30,19 +30,21 @@ namespace ExpressBase.Mobile.Droid.Helpers
                     else if (IsAppInstalled(package2))
                         packageName = package2;
                 }
-
-                Java.IO.File file = new Java.IO.File(filePath);
-                file.SetReadable(true);
-                Android.Net.Uri uri = Android.Support.V4.Content.FileProvider.GetUriForFile(Android.App.Application.Context, Android.App.Application.Context.PackageName + ".fileprovider", file);
-                Intent intent = new Intent(Intent.ActionSend);
                 if (packageName != null)
+                {
+                    Java.IO.File file = new Java.IO.File(filePath);
+                    file.SetReadable(true);
+                    Android.Net.Uri uri = Android.Support.V4.Content.FileProvider.GetUriForFile(Android.App.Application.Context, Android.App.Application.Context.PackageName + ".fileprovider", file);
+                    Intent intent = new Intent(Intent.ActionSend);
                     intent.SetPackage(packageName);
-                intent.SetDataAndType(uri, mimeType);
-                intent.AddFlags(ActivityFlags.GrantReadUriPermission);
-                intent.AddFlags(ActivityFlags.NoHistory);
-                intent.AddFlags(ActivityFlags.ClearWhenTaskReset | ActivityFlags.NewTask);
+                    intent.SetDataAndType(uri, mimeType);
+                    intent.AddFlags(ActivityFlags.GrantReadUriPermission);
+                    intent.AddFlags(ActivityFlags.NoHistory);
+                    intent.AddFlags(ActivityFlags.ClearWhenTaskReset | ActivityFlags.NewTask);
 
-                Android.App.Application.Context.StartActivity(intent);
+                    Android.App.Application.Context.StartActivity(intent);
+                    result = "success";
+                }
             }
             catch (Exception ex)
             {
