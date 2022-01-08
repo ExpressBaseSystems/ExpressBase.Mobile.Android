@@ -163,7 +163,7 @@ namespace ExpressBase.Mobile.Droid.Data
                                 _vals.Add("@" + column.ColumnName);
                             }
 
-                            cmd.Parameters.Add(new SqliteParameter { ParameterName = "@" + column.ColumnName, Value = Table.Rows[k][i] });
+                            cmd.Parameters.Add(new SqliteParameter { ParameterName = "@" + column.ColumnName, Value = SQLiteTableSchema.SQLiteTypeValue(column.Type, Table.Rows[k][i]) });
                         }
 
                         cmd.CommandText = string.Format(query, Table.TableName, string.Join(",", _cols.ToArray()), string.Join(",", _vals.ToArray()));
