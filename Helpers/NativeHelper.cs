@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using Android.OS;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Enums;
@@ -139,6 +141,52 @@ namespace ExpressBase.Mobile.Droid.Helpers
             catch (Exception x)
             {
                 Console.WriteLine(x.Message);
+            }
+        }
+
+        public void BackupLogFiles()
+        {
+            try
+            {
+                const int SizeInKB = 1024;//1MB
+                const int PersistDays = 3;
+
+                string sid = App.Settings.Sid.ToUpper();
+                string root = App.Settings.AppDirectory;
+
+                string fileDir = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{root}/{sid}";
+
+                long length = new FileInfo(fileDir + "/logs.txt").Length;
+
+                if (length > SizeInKB * 1024)
+                {
+                    string[] filePaths = Directory.GetFiles(fileDir, "logs_*.txt");
+
+                    for (int i = 0; i < filePaths.Length; i++)
+                    {
+                        DateTime date = DateTime.MinValue;
+                        try
+                        {
+                            string datePart = Regex.Match(Path.GetFileName(filePaths[i]), @"\d+").Value;
+                            date = DateTime.ParseExact(datePart, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+
+                        if (DateTime.UtcNow > date.AddDays(PersistDays))
+                            File.Delete(filePaths[i]);
+                    }
+
+                    string newPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{root}/{sid}/logs_{(DateTime.UtcNow.ToString("yyyyMMddHHmmss"))}.txt";
+
+                    File.Move(fileDir + "/logs.txt", newPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }
