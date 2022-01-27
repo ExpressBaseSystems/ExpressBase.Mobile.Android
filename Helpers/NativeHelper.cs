@@ -97,6 +97,26 @@ namespace ExpressBase.Mobile.Droid.Helpers
             return null;
         }
 
+        public string Delete(string DirectoryPath, SysContentType Type)
+        {
+            try
+            {
+                string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{DirectoryPath}";
+
+                if (Type == SysContentType.Directory)
+                    Directory.Delete(pathToNewFolder, true);
+                else
+                    File.Delete(pathToNewFolder);
+
+                return pathToNewFolder;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return null;
+        }
+
         public byte[] GetFile(string url)
         {
             try
