@@ -169,7 +169,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             try
             {
                 const int SizeInKB = 1024;//1MB
-                const int PersistDays = 3;
+                const int PersistDays = 30;
 
                 string sid = App.Settings.Sid.ToUpper();
                 string root = App.Settings.AppDirectory;
