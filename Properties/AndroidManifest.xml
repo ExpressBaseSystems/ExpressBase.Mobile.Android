@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.5.3" package="com.expressbase.R_Mad" android:installLocation="preferExternal" android:versionCode="33">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.5.8" package="com.expressbase.R_Mad" android:installLocation="preferExternal" android:versionCode="38">
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
