@@ -30,4 +30,10 @@
     <item name="android:windowTranslucentStatus">true</item>
     <item name="android:windowFullscreen">true</item>
   </style>
+  <style name="Theme.SplashLE" parent="android:Theme">
+    <item name="android:windowBackground">@drawable/SplashScreenLE</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowTranslucentStatus">true</item>
+    <item name="android:windowFullscreen">true</item>
+  </style>
 </resources>
