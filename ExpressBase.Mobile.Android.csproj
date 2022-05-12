@@ -46,6 +46,7 @@
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <LangVersion>8.0</LangVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -70,7 +71,7 @@
     <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
     <AndroidEnableMultiDex>false</AndroidEnableMultiDex>
     <LangVersion>8.0</LangVersion>
-    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -476,6 +477,57 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\disconnected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon_le.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-mdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-xhdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-xxhdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-land-xxxhdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\SplashScreenLE.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-hdpi\icon_le.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-mdpi\icon_le.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xhdpi\icon_le.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\icon_le.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon_le.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
