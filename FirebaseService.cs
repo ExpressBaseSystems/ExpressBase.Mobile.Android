@@ -93,6 +93,8 @@ namespace ExpressBase.Mobile.Droid
                 return Resource.Drawable.icon_ks;
             else if (vendor == LegitEase.VendorName)
                 return Resource.Drawable.icon_le;
+            else if (vendor == Hairocraft.VendorName)
+                return Resource.Drawable.icon_hoc;
             else
                 return Resource.Drawable.ic_launcher;
         }
