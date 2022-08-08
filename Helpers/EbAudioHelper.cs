@@ -5,6 +5,7 @@ using Android.Media;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Helpers;
 using ExpressBase.Mobile.Views.Base;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(EbAudioHelper))]
@@ -13,7 +14,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
 {
     public class EbAudioHelper : IEbAudioHelper
     {
-        readonly string filePath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + "/ebaudio_temp";
+        readonly string filePath = FileSystem.AppDataDirectory + "/ebaudio_temp";
 
         public double MaximumDuration { get; set; }
 

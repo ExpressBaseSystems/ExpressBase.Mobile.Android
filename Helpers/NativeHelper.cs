@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -6,6 +7,7 @@ using Android.OS;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Enums;
 using ExpressBase.Mobile.Helpers;
+using Xamarin.Essentials;
 using static Android.Provider.Settings;
 
 [assembly: Xamarin.Forms.Dependency(typeof(NativeHelper))]
@@ -18,7 +20,8 @@ namespace ExpressBase.Mobile.Droid.Helpers
 
         private string _devoiceid;
 
-        public string NativeRoot => Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+        public string NativeRoot => FileSystem.AppDataDirectory;
+        //public string NativeRoot => Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
 
         public string DeviceId
         {
@@ -63,7 +66,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
         {
             try
             {
-                string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Path}";
+                string pathToNewFolder = NativeRoot + $"/{Path}";
 
                 if (Type == SysContentType.File)
                     return File.Exists(pathToNewFolder);
@@ -81,7 +84,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
         {
             try
             {
-                string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{DirectoryPath}";
+                string pathToNewFolder = NativeRoot + $"/{DirectoryPath}";
 
                 if (Type == SysContentType.Directory)
                     Directory.CreateDirectory(pathToNewFolder);
@@ -101,7 +104,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
         {
             try
             {
-                string pathToNewFolder = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{DirectoryPath}";
+                string pathToNewFolder = NativeRoot + $"/{DirectoryPath}";
 
                 if (Type == SysContentType.Directory)
                     Directory.Delete(pathToNewFolder, true);
@@ -121,7 +124,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
         {
             try
             {
-                string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{url}";
+                string path = NativeRoot + $"/{url}";
                 return File.ReadAllBytes(path);
             }
             catch (Exception x)
@@ -133,7 +136,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
 
         public string[] GetFiles(string Url, string Pattern)
         {
-            string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{Url}";
+            string path = NativeRoot + $"/{Url}";
             return Directory.GetFiles(path, Pattern);
         }
 
@@ -147,9 +150,8 @@ namespace ExpressBase.Mobile.Droid.Helpers
             try
             {
                 string sid = App.Settings.Sid.ToUpper();
-                string root = App.Settings.AppDirectory;
 
-                string path = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{root}/{sid}/logs.txt";
+                string path = NativeRoot + $"/{sid}/logs.txt";
 
                 // Create a string array with the additional lines of text
                 string[] lines = {
@@ -172,9 +174,8 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 const int PersistDays = 30;
 
                 string sid = App.Settings.Sid.ToUpper();
-                string root = App.Settings.AppDirectory;
 
-                string fileDir = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{root}/{sid}";
+                string fileDir = NativeRoot + $"/{sid}";
 
                 long length = new FileInfo(fileDir + "/logs.txt").Length;
 
@@ -199,7 +200,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
                             File.Delete(filePaths[i]);
                     }
 
-                    string newPath = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath + $"/{root}/{sid}/logs_{(DateTime.UtcNow.ToString("yyyyMMddHHmmss"))}.txt";
+                    string newPath = NativeRoot + $"/{sid}/logs_{(DateTime.UtcNow.ToString("yyyyMMddHHmmss"))}.txt";
 
                     File.Move(fileDir + "/logs.txt", newPath);
                 }
@@ -209,5 +210,24 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 Console.WriteLine(ex.Message);
             }
         }
+
+        public void AddBackupLogFiles(List<EmailAttachment> Attachments)
+        {
+            try
+            {
+                string sid = App.Settings.Sid.ToUpper();
+                string fileDir = NativeRoot + $"/{sid}";
+                string[] filePaths = Directory.GetFiles(fileDir, "logs_*.txt");
+                for (int i = 0; i < filePaths.Length; i++)
+                {
+                    Attachments.Add(new EmailAttachment(filePaths[i]));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("AddBackupLogFiles: " + ex.Message);
+            }
+        }
+
     }
 }
