@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Android.OS;
 using ExpressBase.Mobile.Droid.Helpers;
 using ExpressBase.Mobile.Enums;
@@ -227,6 +228,38 @@ namespace ExpressBase.Mobile.Droid.Helpers
             {
                 Console.WriteLine("AddBackupLogFiles: " + ex.Message);
             }
+        }
+
+        public async Task<bool> RequestGalleryPermissionAsync()
+        {
+            if (DeviceInfo.Platform != DevicePlatform.Android)
+                return true;
+
+            if (DeviceInfo.Version.Major >= 13)
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.Media>();
+                if (status != PermissionStatus.Granted)
+                    status = await Permissions.RequestAsync<Permissions.Media>();
+
+                return status == PermissionStatus.Granted;
+            }
+            else
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+                if (status != PermissionStatus.Granted)
+                    status = await Permissions.RequestAsync<Permissions.StorageRead>();
+
+                return status == PermissionStatus.Granted;
+            }
+        }
+
+        public async Task<bool> RequestCameraPermissionAsync()
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            if (status != PermissionStatus.Granted)
+                status = await Permissions.RequestAsync<Permissions.Camera>();
+
+            return status == PermissionStatus.Granted;
         }
 
     }
