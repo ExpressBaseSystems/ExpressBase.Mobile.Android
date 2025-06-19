@@ -56,14 +56,21 @@ namespace ExpressBase.Mobile.Droid.Helpers
 
         public bool EnableAndCheckBluetoothAdapter()
         {
-            BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
-            if (adapter == null || !adapter.IsEnabled)
+            try
             {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ActionRequestEnable);
-                MainActivity.Instance.StartActivityForResult(enableBtIntent, 1);
+                BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
+                if (adapter == null || !adapter.IsEnabled)
+                {
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ActionRequestEnable);
+                    MainActivity.Instance.StartActivityForResult(enableBtIntent, 1);
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
                 return false;
             }
-            return true;
         }
 
         public async Task<bool> ConnectToPrinter(string printerName)
@@ -146,29 +153,6 @@ namespace ExpressBase.Mobile.Droid.Helpers
 
         //===========================================================
 
-        private static void PrintCentered(string text, System.Drawing.Font font, ref float yPosition, PrintPageEventArgs e)
-        {
-            Graphics? g = e.Graphics;
-
-            System.Drawing.Brush brush = Brushes.Black;
-
-            if (g != null)
-            {
-                int pageWidth = e.PageBounds.Width;
-
-                // Measure the width of the text
-                SizeF textSize = g.MeasureString(text, font);
-
-                // Calculate the X position to center the text
-                float xPosition = (pageWidth - textSize.Width) / 2;
-
-                // Draw the text
-                g.DrawString(text, font, brush, xPosition, yPosition);
-
-                yPosition += textSize.Height;
-            }
-        }
-
         public async Task<bool> PrintInvoice(string refid, string param)
         {
             bool connected = false;
@@ -200,6 +184,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
                     store_name = (string)getCellValue(dr, "store_name", typeof(string)),
                     store_address = (string)getCellValue(dr, "store_address", typeof(string)),
                     store_vattrn = (string)getCellValue(dr, "store_vattrn", typeof(string)),
+                    store_whatsapp = (string)getCellValue(dr, "store_whatsapp", typeof(string)),
                     customer_details = (string)getCellValue(dr, "customer_details", typeof(string)),
                     invoice_details = (string)getCellValue(dr, "invoice_details", typeof(string)),
                     amt_received = (double)getCellValue(dr, "amt_received", typeof(double)),
@@ -214,7 +199,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
                         rate = (double)getCellValue(row, "rate", typeof(double)),
                         vat_per = (double)getCellValue(row, "vat_per", typeof(double)),
                         qty = (int)getCellValue(row, "qty", typeof(int)),
-                        rtn = (int)getCellValue(row, "rtn", typeof(int)),
+                        rtn = (string)getCellValue(row, "rtn", typeof(string)),
                         net_amt = (double)getCellValue(row, "net_amt", typeof(double)),
                         vat_amt = (double)getCellValue(row, "vat_amt", typeof(double)),
                         amt = (double)getCellValue(row, "amt", typeof(double))
@@ -261,6 +246,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             public string store_name { get; set; }
             public string store_address { get; set; }
             public string store_vattrn { get; set; }
+            public string store_whatsapp { get; set; }
             public string customer_details { get; set; }
             public string invoice_details { get; set; }
             public double amt_received { get; set; }
@@ -279,7 +265,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             public double rate { get; set; }
             public double vat_per { get; set; }
             public int qty { get; set; }
-            public int rtn { get; set; }
+            public string rtn { get; set; }
             public double net_amt { get; set; }
             public double vat_amt { get; set; }
             public double amt { get; set; }
@@ -295,6 +281,7 @@ namespace ExpressBase.Mobile.Droid.Helpers
             try
             {
                 int NormalMaxChars = 69;
+                int LargeMaxChars = 34;
                 // ESC/POS Commands
                 byte[] initCommand = new byte[] { 0x1B, 0x40 }; // ESC @ (Initialize Printer)
                 byte[] rightAlign = new byte[] { 0x1B, 0x61, 0x02 }; // ESC a 2 (Right Align)
@@ -308,46 +295,48 @@ namespace ExpressBase.Mobile.Droid.Helpers
                 byte[] fontdWidth = new byte[] { 0x1B, 0x21, 0x20 }; // Double width
                 byte[] fontLarge = new byte[] { 0x1B, 0x21, 0x30 }; // Double width & height (Large)
                 byte[] setFont = { 27, 77, 0 };
+                byte[] DIVIDER = leftAlign.Concat(fontdWidth.Concat(boldOn.Concat(Encoding.UTF8.GetBytes(new string('-', LargeMaxChars)).Concat(boldOff.Concat(fontNormal))))).ToArray();
+                byte[] HEAD_DIVIDER = leftAlign.Concat(Encoding.UTF8.GetBytes(new string('*', NormalMaxChars))).ToArray();
 
-                // Print Header
-                await _outputStream.WriteAsync(initCommand, 0, initCommand.Length);
-                await _outputStream.WriteAsync(setFont, 0, setFont.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(leftAlign, 0, leftAlign.Length);
-                await _outputStream.WriteAsync(fontNormal, 0, fontNormal.Length);
-                await _outputStream.WriteAsync(boldOn, 0, boldOn.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('=', NormalMaxChars - 5)), 0, NormalMaxChars - 5);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                List<byte> bytes = new List<byte>();
+                bytes.AddRange(initCommand);
+                //bytes.AddRange(setFont);
 
-                await _outputStream.WriteAsync(centerAlign, 0, centerAlign.Length);
-                await _outputStream.WriteAsync(fontLarge, 0, fontLarge.Length);
-                await _outputStream.WriteAsync(boldOn, 0, boldOn.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(_data.store_name), 0, _data.store_name.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(HEAD_DIVIDER);
+                bytes.AddRange(lineFeed);
 
-                await _outputStream.WriteAsync(fontNormal, 0, fontNormal.Length);
-                await _outputStream.WriteAsync(centerAlign, 0, centerAlign.Length);
-                await _outputStream.WriteAsync(boldOn, 0, boldOn.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(_data.store_address), 0, _data.store_address.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(fontLarge);
+                bytes.AddRange(centerAlign);
+                bytes.AddRange(Encoding.UTF8.GetBytes(_data.store_name));
+                bytes.AddRange(lineFeed);
 
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(_data.store_vattrn), 0, _data.store_vattrn.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(fontNormal);
+                bytes.AddRange(centerAlign);
+                bytes.AddRange(Encoding.UTF8.GetBytes(_data.store_address));
+                bytes.AddRange(lineFeed);
 
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('=', NormalMaxChars - 5)), 0, NormalMaxChars - 5);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(Encoding.UTF8.GetBytes(_data.store_vattrn));
+                bytes.AddRange(lineFeed);
 
-                await _outputStream.WriteAsync(centerAlign, 0, centerAlign.Length);
+                if (!string.IsNullOrWhiteSpace(_data.store_whatsapp))
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(_data.store_whatsapp));
+                    bytes.AddRange(lineFeed);
+                }
+
+                bytes.AddRange(HEAD_DIVIDER);
+                bytes.AddRange(lineFeed);
+
+                bytes.AddRange(centerAlign);
                 string temp = "|  TAX INVOICE  |";
-                await _outputStream.WriteAsync(boldOn, 0, boldOn.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('-', temp.Length)), 0, temp.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(temp), 0, temp.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('-', temp.Length)), 0, temp.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(leftAlign, 0, leftAlign.Length);
+                bytes.AddRange(Encoding.UTF8.GetBytes(new string('-', temp.Length)));
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(Encoding.UTF8.GetBytes(temp));
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(Encoding.UTF8.GetBytes(new string('-', temp.Length)));
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(leftAlign);
 
                 List<string> arr1 = _data.customer_details.Split("$$$").ToList();
                 List<string> arr2 = _data.invoice_details.Split("$$$").ToList();
@@ -376,80 +365,89 @@ namespace ExpressBase.Mobile.Droid.Helpers
                     }
                     if (temp.Length > 0)
                     {
-                        await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(temp), 0, temp.Length);
-                        await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                        bytes.AddRange(Encoding.UTF8.GetBytes(temp));
+                        bytes.AddRange(lineFeed);
                     }
                 }
 
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('=', NormalMaxChars - 5)), 0, NormalMaxChars - 5);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(DIVIDER);
+                bytes.AddRange(lineFeed);
 
                 // Print Table Header
-                await _outputStream.WriteAsync(boldOn, 0, boldOn.Length);
-                string header = "ITEM NAME".PadRight(38) + "RATE".PadLeft(8) + "QTY+".PadLeft(6) + "RTN-".PadLeft(6) + "AMT".PadLeft(10);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(header), 0, header.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('-', NormalMaxChars)), 0, NormalMaxChars);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                //bytes.AddRange(boldOn);
+                string header = "ITEM NAME".PadRight(37) + "RATE".PadLeft(8) + "QTY+".PadLeft(6) + "RTN-".PadLeft(7) + "AMT".PadLeft(10);
+                bytes.AddRange(Encoding.UTF8.GetBytes(header));
+                //bytes.AddRange(boldOff);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(DIVIDER);
+                bytes.AddRange(lineFeed);
 
                 double totalAmt = 0;
                 double totalVat = 0;
                 double totalNetAmt = 0;
-
                 foreach (InvoiceDataLines item in _data.items)
                 {
                     if (item.item_name.Length > 38)
                     {
-                        string tempstr = item.item_name.Substring(0, 38);
-                        item.item_name = item.item_name.Substring(38);
-                        await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(tempstr), 0, tempstr.Length);
-                        await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                        string tempstr = item.item_name.Substring(0, 37);
+                        item.item_name = item.item_name.Substring(37);
+                        bytes.AddRange(Encoding.UTF8.GetBytes(tempstr));
+                        bytes.AddRange(lineFeed);
                     }
-                    string itemLine = item.item_name.PadRight(38) + $"{item.rate,8:0.00}{item.qty,6}{item.rtn,6}{item.net_amt,10:0.00}";
-                    await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(itemLine), 0, itemLine.Length);
-                    await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                    string itemLine = item.item_name.PadRight(37) + $"{item.rate,8:0.00}{item.qty,6}" + item.rtn.PadLeft(7) + $"{item.net_amt,10:0.00}";
+                    bytes.AddRange(Encoding.UTF8.GetBytes(itemLine));
+                    bytes.AddRange(lineFeed);
 
                     totalAmt += item.amt;
                     totalVat += item.vat_amt;
                     totalNetAmt += item.net_amt;
                 }
 
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('-', NormalMaxChars)), 0, NormalMaxChars);
-
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(DIVIDER);
+                bytes.AddRange(lineFeed);
 
                 // Print Total
-                string totalLine = $"GROSS AMOUNT: {totalAmt,10:0.00}";//14
-                string vatTotalLine = $"VAT TOTAL: {totalVat,13:0.00}";//11
-                string netTotalLine = $"NET AMOUNT: {totalNetAmt,12:0.00}";//12
-                string amtReceived = $"AMT RECEIVED: {_data.amt_received,10:0.00}";//14
-                string closingBalance = $"CLOSING BAL: {_data.closing_balance,11:0.00}";//13
+                string totalLine = $"GROSS AMOUNT : AED{totalAmt,9:0.00}";//14
+                string vatTotalLine = $"VAT 5% TOTAL : AED{totalVat,9:0.00}";//14
+                string netTotalLine = $"NET AMOUNT   : AED{totalNetAmt,9:0.00}";//14
 
-                await _outputStream.WriteAsync(leftAlign, 0, leftAlign.Length);
-                await _outputStream.WriteAsync(boldOn, 0, boldOn.Length);
+                string amtReceived = $"AMT RECEIVED      : AED{_data.amt_received,9:0.00}";//14
+                string closingBalance = $"TOTAL OUTSTANDING : AED{_data.closing_balance,9:0.00}";//19
+
+                bytes.AddRange(leftAlign);
+                //bytes.AddRange(boldOn);
                 totalLine = totalLine.PadLeft(NormalMaxChars - 2);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(totalLine), 0, totalLine.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(Encoding.UTF8.GetBytes(totalLine));
+                bytes.AddRange(lineFeed);
 
                 vatTotalLine = amtReceived.PadRight(NormalMaxChars - vatTotalLine.Length - 2) + vatTotalLine;
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(vatTotalLine), 0, vatTotalLine.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(Encoding.UTF8.GetBytes(vatTotalLine));
+                bytes.AddRange(lineFeed);
 
                 netTotalLine = closingBalance.PadRight(NormalMaxChars - netTotalLine.Length - 2) + netTotalLine;
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(netTotalLine), 0, netTotalLine.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(Encoding.UTF8.GetBytes(new string('=', NormalMaxChars - 5)), 0, NormalMaxChars - 5);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
-                await _outputStream.WriteAsync(lineFeed, 0, lineFeed.Length);
+                bytes.AddRange(Encoding.UTF8.GetBytes(netTotalLine));
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(HEAD_DIVIDER);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(lineFeed);
+                bytes.AddRange(lineFeed);
 
                 // Cut Paper (if supported)
-                byte[] cut = new byte[] { 0x1D, 0x56, 0x00 }; // ESC/POS Cut Paper
-                await _outputStream.WriteAsync(cut, 0, cut.Length);
+                byte[] cut = new byte[] { 0x1D, 0x56, 0x41, 0x00 }; // ESC/POS Cut Paper
+                bytes.AddRange(cut);
 
+                foreach (var chunk in ChunkData(bytes.ToArray(), 256))
+                {
+                    await _outputStream.WriteAsync(chunk, 0, chunk.Length);
+                    await Task.Delay(200);
+                }
+
+                //await _outputStream.WriteAsync(bytes.ToArray(), 0, bytes.Count);
                 await _outputStream.FlushAsync();
+                await Task.Delay(3000);
             }
             catch (Exception ex)
             {
@@ -457,6 +455,10 @@ namespace ExpressBase.Mobile.Droid.Helpers
             }
         }
 
-
+        IEnumerable<byte[]> ChunkData(byte[] data, int chunkSize)
+        {
+            for (int i = 0; i < data.Length; i += chunkSize)
+                yield return data.Skip(i).Take(chunkSize).ToArray();
+        }
     }
 }
