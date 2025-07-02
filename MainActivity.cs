@@ -13,6 +13,7 @@ using System;
 using Android;
 using ExpressBase.Mobile.Services.Navigation;
 using Xamarin.Forms.Platform.Android;
+using Android.Views;
 
 namespace ExpressBase.Mobile.Droid
 {
@@ -59,9 +60,12 @@ namespace ExpressBase.Mobile.Droid
 
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            //Xamarin.Forms.Forms.SetFlags("RadioButton_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             await CrossMedia.Current.Initialize();
             Xamarin.FormsMaps.Init(this, savedInstanceState);
+
+            //Window.SetSoftInputMode(Android.Views.SoftInput.AdjustResize);
 
             EbNFData ebnfData = this.GetNFDataOnCreate();
 
@@ -77,6 +81,13 @@ namespace ExpressBase.Mobile.Droid
             Instance = this;
             this.SetStatusBarColor(Android.Graphics.Color.ParseColor(Configuration.EbBuildConfig.StatusBarColor));
             Xamarin.Forms.Application.Current.On<Xamarin.Forms.PlatformConfiguration.Android>().UseWindowSoftInputModeAdjust(WindowSoftInputModeAdjust.Resize);
+
+            bool opt = Convert.ToInt32(Build.VERSION.SdkInt) >= 35;
+            if (opt)
+            {
+                Window.DecorView.SetOnApplyWindowInsetsListener(new InsetsListener());
+                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)SystemUiFlags.LightStatusBar;
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -157,6 +168,27 @@ namespace ExpressBase.Mobile.Droid
             }
             catch (Exception) { }
             return null;
+        }
+    }
+
+    public class InsetsListener : Java.Lang.Object, View.IOnApplyWindowInsetsListener
+    {
+        public WindowInsets OnApplyWindowInsets(View v, WindowInsets insets)
+        {
+            var insetsCompat = insets?.GetInsets(WindowInsets.Type.SystemBars());
+            if (insetsCompat != null)
+            {
+                int bottomInset = insetsCompat.Bottom;
+                int topInset = insetsCompat.Top;
+
+                // Prevent double-padding
+                if (v.PaddingBottom != bottomInset || v.PaddingTop != topInset)
+                {
+                    v.SetPadding(0, topInset, 0, bottomInset);
+                }
+            }
+
+            return insets;
         }
     }
 }

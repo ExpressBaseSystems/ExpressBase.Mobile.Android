@@ -13,7 +13,6 @@ namespace ExpressBase.Mobile.Droid
             Window.DecorView.SystemUiVisibility = (StatusBarVisibility)((int)Window.DecorView.SystemUiVisibility ^ (int)SystemUiFlags.LayoutStable ^ (int)SystemUiFlags.LayoutFullscreen);
             Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-            Xamarin.Forms.Forms.SetFlags("RadioButton_Experimental");
             base.OnCreate(bundle);
             this.StartActivity(typeof(MainActivity));
         }
